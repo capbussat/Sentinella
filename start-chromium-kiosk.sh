@@ -1,4 +1,5 @@
 #!/bin/bash
+# Substitute the prefrred starting domain on last line
 chromium \
     --no-first-run \
     --disable \
