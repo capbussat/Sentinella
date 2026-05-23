@@ -1,5 +1,7 @@
 #!/bin/bash
 # sentinella.sh
+# place the CHECK_FILE on your system to start internet restrictions. 
+# remove this file to stop internet restrictions.
 CHECK_FILE=/tmp/sentinella
 # Si està aquest fitxer, no cal engegar de nou
 CHECK_ON="/tmp/sentinella-on"
