@@ -11,7 +11,9 @@ Use:
 
 git clone https://github.com/capbussat/Sentinella/\
 cd Sentinella\
-- Edit allow file and place a allowed domain in each line\
+# Allow file
+Edit allow file and place a allowed domain in each line\
+# Install and run
 sudo chmod +x install-kiosk.sh\
 sudo ./install-kiosk.sh\
 sudo chmod +x install-chromium-policies.sh\
@@ -19,9 +21,9 @@ sudo ./install-chromium-policies.sh\
 sudo chmod +x install-sentinella.sh\
 sudo ./install-sentinella.sh
 
-In fact, you do not need to install anything if you use:
-sudo chmod +x onsentinella.sh
-sudo chmod +x offsentinella.sh
+# You do not need to install anything if you use:
+sudo chmod +x onsentinella.sh\
+sudo chmod +x offsentinella.sh\
 ./onsentinella.sh\
 Restricts internet access.\
 ./offsentinella.sh\
