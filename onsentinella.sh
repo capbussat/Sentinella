@@ -8,22 +8,33 @@
 #  set -o pipefail prevents errors in a pipeline from being masked# 
 set -euo pipefail
 
+# --- Comprovació de permisos: força execució com a root ---
+if [[ $EUID -ne 0 ]]; then
+  echo -e "Cal ser root. Re-executant amb sudo..."
+  exec sudo bash "$0" "$@"
+fi
+
 # Marca com iniciat
 SENTINELLA_IS_ON="sentinella_is_on"
 
-# comprovació de allow
+# comprova que el fitxer allow existeix
 ALLOW_FILE=allow
 
 if [[ ! -f "$ALLOW_FILE" ]]; then
-    echo "Missing allow file"
+    echo "Falta el fitxer allow"
     exit 1
 fi
 
-
-ips=()
-# Comprova IPs, ha d'estar abans que la consulta de dominis 
+# Comprova IPs
 is_ipv4() {
-    [[ "$1" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]
+    local ip=$1
+    [[ $ip =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] || return 1
+
+    IFS='.' read -r a b c d <<< "$ip"
+
+    for octet in $a $b $c $d; do
+        ((octet >= 0 && octet <= 255)) || return 1
+    done
 }
 
 while IFS= read -r domini; do
@@ -35,30 +46,33 @@ while IFS= read -r domini; do
     done < <(dig +short "$domini")
 done < "$ALLOW_FILE"
 
-# actualitza date
+# Actualitza date
 log_date() {
      date +'%Y-%m-%d-%H%M'
 }
-
 
 restrict() {
 if [ -f "$SENTINELLA_IS_ON" ]; then
     exit 0
 fi
+# internet
     ufw default deny outgoing
+# allow ips
     for ip in "${ips[@]}"; do
         ufw allow out to "$ip" port 443 proto tcp
         ufw allow out to "$ip" port 80 proto tcp
     done
+# veyon
     ufw allow 11100/tcp
     ufw allow 11200/tcp
     ufw allow 11300/tcp
     ufw allow 11400/tcp
-    ufw allow out proto udp to any port 53
-    ufw allow out proto tcp to any port 53
+#services
+    ufw allow to any port 22 proto tcp
+    ufw allow to any port 53
+# final
     ufw --force enable
-    ufw status verbose
-    echo "$(log_date) Enabled UFW rules " 
+    ufw verbose
     touch "${SENTINELLA_IS_ON}"
     echo "$(log_date) Set ${SENTINELLA_IS_ON} " 
 }
