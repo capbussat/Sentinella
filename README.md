@@ -9,10 +9,11 @@ Close outgoing internet traffik except for essential services (DHCP, DNS, Veyon 
 There are three separate installation scripts. You do not need to use all of them.\
 Use:
 
-git clone https://github.com/capbussat/Sentinella/\
-cd Sentinella\
+git clone https://github.com/capbussat/Sentinella;
+cd Sentinella
+
 # Allow file
-Edit allow file and place a allowed domain in each line\
+Edit allow file and place a allowed domain in each line
 # Install and run
 sudo chmod +x install-kiosk.sh\
 sudo ./install-kiosk.sh\
@@ -27,4 +28,4 @@ sudo chmod +x offsentinella.sh\
 ./onsentinella.sh\
 Restricts internet access.\
 ./offsentinella.sh\
-Allows internet access.\
+Allows internet access.
