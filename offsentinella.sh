@@ -24,8 +24,19 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 echo "Allow internet"
+echo "Permet internet"
 ufw  --force reset
 ufw default allow outgoing
-ufw --force enable
-ufw verbose
-rm -f "${SENTINELLA_IS_ON}"
+# veyon
+    ufw allow 11100/tcp
+    ufw allow 11200/tcp
+    ufw allow 11300/tcp
+    ufw allow 11400/tcp
+#services
+    ufw allow to any port 22 proto tcp
+    ufw allow to any port 53
+# final
+    ufw --force enable
+    ufw verbose
+    rm -f "${SENTINELLA_IS_ON}"
+echo "Sentinella is OFF"
