@@ -2,6 +2,8 @@
 # llegir els usuaris juntament amb les ip
 # afegir la clau i treure la contrasenya
 from fabric import Connection
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 class SSHService:
     def __init__(self, url):
