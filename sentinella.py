@@ -411,8 +411,8 @@ def main(page: ft.Page):
             ),
             ft.Row(
                     controls=[ 
-                        btn_start_browser,
-                        switch_change_internet
+                        # btn_start_browser,
+                        # switch_change_internet
                     ],
             ),
             ft.Row(

@@ -10,13 +10,25 @@ settings:
     settings: "/etc/sentinella"
 
 buttons:
-  - title: "Actualitzar sistema"
-    unique_word: "update"
+  - title: "Desactiva internet"
+    unique_word: "disable"
     color: "#FFFFFF"
     background_color: "#007BFF"
-    command: "sudo apt update && sudo apt upgrade -y"
+    command: "touch /tmp/sentinella"
 
-  - title: "Iniciar el navegador"
+  - title: "Activa internet"
+    unique_word: "enable"
+    color: "#FFFFFF"
+    background_color: "#007BFF"
+    command: "rm --force /tmp/sentinella"
+
+  - title: "Comprova internet"
+    unique_word: "enable"
+    color: "#FFFFFF"
+    background_color: "#007BFF"
+    command: "sudo ufw verbose"
+    
+  - title: "Inicia el navegador"
     unique_word: "start"
     color: "#FFFFFF"
     background_color: "#007BFF"
