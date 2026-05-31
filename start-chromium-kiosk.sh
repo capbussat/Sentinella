@@ -1,6 +1,6 @@
 #!/bin/bash
 # Substitute the prefrred starting domain on last line
-chromium \
+DISPLAY=:0 nohup chromium \
     --no-first-run \
     --disable \
     --disable-translate \
