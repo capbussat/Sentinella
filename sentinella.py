@@ -10,24 +10,20 @@ Requirements:
 Run:
     python app.py
 """
-
-import threading
-import time
-
 import flet as ft
 from fabric import Connection
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-
+from settings import settings
 
 # ---------------------------------------------------------------------
 # CONFIG
 # ---------------------------------------------------------------------
 
-SSH_USER = "admin"
-SSH_TIMEOUT = 5
-MAX_THREADS = 10
-
+SSH_USER = settings.settings["ssh_user"]
+SSH_TIMEOUT =  settings.settings["ssh_timeout"]
+MAX_THREADS = settings.settings["max_threads"]
 
 def load_hosts_from_file(filename="hosts") -> list[str]:
 
@@ -259,12 +255,24 @@ def main(page: ft.Page):
     # BUTTON EVENTS
     # -------------------------------------------------------------
 
+    def btn_dynamic_click(e):
+        
+        ### Dynamic button
+        
+        command = e.control.data
+        print(command)
+        threading.Thread(
+            target=run_commands(command),
+            daemon=True,
+        ).start()
+
+
     def btn_start_browser_click(e):
         
         ### Start browser with policies
 
         threading.Thread(
-            target=run_commands("./start-chromium-kiosk.sh"),
+            target=run_commands("DISPLAY=:0 nohup /usr/local/bin/start-chromium-kiosk.sh"),
             daemon=True,
         ).start()
 
@@ -326,6 +334,20 @@ def main(page: ft.Page):
     # BUTTONS
     # -------------------------------------------------------------
 
+    # load dynamic buttons
+    buttons = []
+
+    for button in settings.buttons:
+        buttons.append(
+            ft.Chip(
+                label=button["title"],
+                leading=ft.Icon(ft.Icons.WEB),
+                autofocus=True,
+                data=button["command"],
+                on_click=btn_dynamic_click,
+            )
+        )
+
     checkbox_select_all = ft.Checkbox(
                         label="Select all",
                         value=True,
@@ -346,6 +368,7 @@ def main(page: ft.Page):
                                     # label_text_style=ft.TextStyle(color=ft.Colors.BLACK),
                                     on_click=btn_start_browser_click,
     )
+    
 
     switch_change_internet =  ft.Switch(
         label="Internet", 
@@ -390,6 +413,11 @@ def main(page: ft.Page):
                     controls=[ 
                         btn_start_browser,
                         switch_change_internet
+                    ],
+            ),
+            ft.Row(
+                    controls=[ 
+                        *buttons  # unpacking
                     ],
             ),
             ft.Divider(),

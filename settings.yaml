@@ -1,0 +1,23 @@
+settings:
+  type: "ssh"
+  ssh_user: "isard"
+  ssh_timeout: 5
+  max_threads: 10
+  version: "1.0.0"
+  directory:
+    data: "/tmp"
+    binary: "/usr/local/bin"
+    settings: "/etc/sentinella"
+
+buttons:
+  - title: "Actualitzar sistema"
+    unique_word: "update"
+    color: "#FFFFFF"
+    background_color: "#007BFF"
+    command: "sudo apt update && sudo apt upgrade -y"
+
+  - title: "Iniciar el navegador"
+    unique_word: "start"
+    color: "#FFFFFF"
+    background_color: "#007BFF"
+    command: "start-chromium-kiosk.sh"
