@@ -5,7 +5,11 @@
 #  Instal·la el servei i el timer systemd de Sentinella
 # ============================================================
 
-set -e  # Atura l'script si hi ha algun error
+# set -e option instructs bash to immediately exit if any command has a non-zero exit status.
+# set -u if variable does not exist causes the program to immediately exit.
+# set -x all executed commands are printed to the terminal. 
+#  set -o pipefail prevents errors in a pipeline from being masked# 
+set -euo pipefail
 
 # --- Colors ---
 GREEN="\033[0;32m"
@@ -95,6 +99,8 @@ systemctl status sentinella.timer --no-pager
 
 echo ""
 info "Comandes útils:"
+echo "  touch /tmp/sentilla desactiva internet"
+echo "  rm --force /tmp/sentinella activa internet"
 echo "  systemctl status sentinella.timer   → Estat del timer"
 echo "  systemctl status sentinella.service  → Estat del servei"
 echo "  journalctl -u sentinella.service -f  → Logs en temps real"
