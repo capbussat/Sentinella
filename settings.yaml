@@ -22,12 +22,18 @@ buttons:
     background_color: "#007BFF"
     command: "rm --force /tmp/sentinella"
 
-  - title: "Comprova internet"
+  - title: "Comprova Google"
     unique_word: "enable"
     color: "#FFFFFF"
     background_color: "#007BFF"
-    command: "sudo ufw verbose"
+    command: "ping www.google.com"
     
+  - title: "Comprova Institut Pedralbes"
+    unique_word: "enable"
+    color: "#FFFFFF"
+    background_color: "#007BFF"
+    command: "ping institutpedralbes.cat"
+
   - title: "Inicia el navegador"
     unique_word: "start"
     color: "#FFFFFF"
