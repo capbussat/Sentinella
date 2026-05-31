@@ -1,7 +1,8 @@
 #!/bin/bash
 # offsentinella.sh
 # Off sentinella without service or timer
-# Works with onsentinella.sh
+# No installation required
+# Complements onsentinella.sh
 
 # set -e option instructs bash to immediately exit if any command has a non-zero exit status.
 # set -u if variable does not exist causes the program to immediately exit.

@@ -1,14 +1,24 @@
 #!/bin/bash
 # sentinella.sh
 # place the CHECK_FILE on your system to start internet restrictions. 
+
 # remove this file to stop internet restrictions.
 CHECK_FILE=/tmp/sentinella
+
 # Si està aquest fitxer, no cal engegar de nou
 CHECK_ON="/tmp/sentinella-on"
+
+# log
 LOG="/var/log/sentinella.log"
-DATE="$(date +'%Y%m%d_%H%M')"
+
+# actualitza date
+log_date() {
+     date +'%Y-%m-%d-%H%M'
+}
+
 # comprovació de ip
 ALLOW_FILE=/tmp/allow
+
 ips=()
 # Comprova IPs
 is_ipv4() {
@@ -47,23 +57,40 @@ fi
     ufw allow out proto tcp to any port 53
     ufw enable
     ufw status verbose
-    echo "$DATE Enabled UFW rules " >>  "${LOG}"
+    echo "$log_date Enabled UFW rules " >>  "${LOG}"
     touch "${CHECK_ON}"
-    echo "$DATE Set ${CHECK_ON} " >>  "${LOG}"
+    echo "$log_date Set ${CHECK_ON} " >>  "${LOG}"
 }
 
 allow() {
-    ufw disable
-    echo "$DATE Disabled UFW rules " >>  "${LOG}"
+echo "Allow internet"
+echo "Permet internet"
+ufw  --force reset
+ufw default allow outgoing
+# veyon
+    ufw allow 11100/tcp
+    ufw allow 11200/tcp
+    ufw allow 11300/tcp
+    ufw allow 11400/tcp
+#services
+    ufw allow to any port 22 proto tcp
+    ufw allow to any port 53
+# final
+    ufw --force enable
+    ufw verbose
+    rm -f "${SENTINELLA_IS_ON}"
+echo "Sentinella is OFF"
     rm -f "${CHECK_ON}"
-    echo "$DATE Unset ${CHECK_ON} " >>  "${LOG}"
+    echo "$log_date Disabled UFW rules " >>  "${LOG}"
 }
+
+
 if [[ -f "$CHECK_FILE" ]]; then
     if [ -f "$CHECK_ON" ]; then
-        echo "Continua restringint internet"
+        echo "Continua restict internet"
         exit 0
     fi
-        echo "Restringeix internet"
+        echo "Restrict internet"
         restrict
         touch "$CHECK_ON"
 else
