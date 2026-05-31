@@ -18,7 +18,7 @@ fi
 
 # Crea l'usuari kiosk
 if id "$KIOSK_USER" &>/dev/null; then
-  echo "L'usuari '$KIOSK_USER' ja existeix. S'omiteix la creació."
+  echo "L'usuari '$KIOSK_USER' ja existeix. S'omet la creació de l'usuari."
 else
   adduser --disabled-password --gecos "" "$KIOSK_USER"
   passwd "$KIOSK_USER"
