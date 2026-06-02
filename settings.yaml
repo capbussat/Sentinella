@@ -26,16 +26,10 @@ buttons:
     unique_word: "enable"
     color: "#FFFFFF"
     background_color: "#007BFF"
-    command: "ping www.google.com"
-    
-  - title: "Comprova Institut Pedralbes"
-    unique_word: "enable"
-    color: "#FFFFFF"
-    background_color: "#007BFF"
-    command: "ping institutpedralbes.cat"
+    command: "ping -c 4 www.google.com"
 
   - title: "Inicia el navegador"
     unique_word: "start"
     color: "#FFFFFF"
     background_color: "#007BFF"
-    command: "start-chromium-kiosk.sh"
+    command: "/usr/local/bin/start-chromium-kiosk.sh"
