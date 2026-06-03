@@ -20,19 +20,6 @@ SSH_USER = settings.settings["ssh_user"]
 SSH_TIMEOUT =  settings.settings["ssh_timeout"]
 MAX_THREADS = settings.settings["max_threads"]
 
-def load_settings_yaml(path="settings.yaml"):
-
-    if not os.path.exists(path):
-        return None
-
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f)
-
-    except Exception:
-        return None
-
-
 # ---------------------------------------------------------------------
 # SSH EXECUTION
 # ---------------------------------------------------------------------
@@ -127,10 +114,7 @@ class SentinellaApp(ttk.Window):
         super().__init__(themename="superhero")
         self.buttons_config = []
 
-        config = load_settings_yaml()
-
-        if config and "buttons" in config:
-            self.buttons_config = config["buttons"]
+        self.buttons_config = settings.buttons
 
         self.title("Sentinella GUI")
         self.geometry("1200x700")
@@ -188,47 +172,47 @@ class SentinellaApp(ttk.Window):
                 f"[ERROR {title}] {e}"
             )
 
-    def start_browser(self):
+    # def start_browser(self):
 
-        selected_hosts = [
-            host
-            for host, var in self.host_vars.items()
-            if var.get()
-        ]
+    #     selected_hosts = [
+    #         host
+    #         for host, var in self.host_vars.items()
+    #         if var.get()
+    #     ]
 
-        if not selected_hosts:
-            self.append_result(
-                "[WARNING] Selecciona almenys un host."
-            )
-            return
+    #     if not selected_hosts:
+    #         self.append_result(
+    #             "[WARNING] Selecciona almenys un host."
+    #         )
+    #         return
 
-        command = "DISPLAY=:0 nohup /usr/local/bin/start-chromium-kiosk.sh  >/dev/null 2>&1 &"
-        try:
+    #     command = "DISPLAY=:0 nohup /usr/local/bin/start-chromium-kiosk.sh  >/dev/null 2>&1 &"
+    #     try:
 
-            results = run_commands(
-                selected_hosts,
-                "Inicia el navegador",
-                command
-            )
+    #         results = run_commands(
+    #             selected_hosts,
+    #             "Inicia el navegador",
+    #             command
+    #         )
 
-            output = "\n=== INICI NAVEGADOR ===\n\n"
+    #         output = "\n=== INICI NAVEGADOR ===\n\n"
 
-            for r in results:
+    #         for r in results:
 
-                output += (
-                    f"{r['host']}: "
-                    f"{r['success']}\n"
-                )
+    #             output += (
+    #                 f"{r['host']}: "
+    #                 f"{r['success']}\n"
+    #             )
 
-            output += "\n"
+    #         output += "\n"
 
-            self.append_result(output)
+    #         self.append_result(output)
 
-        except Exception as e:
+    #     except Exception as e:
 
-            self.append_result(
-                f"[ERROR] {e}"
-            )
+    #         self.append_result(
+    #             f"[ERROR] {e}"
+    #         )
 
     def create_widgets(self):
 
@@ -334,6 +318,8 @@ class SentinellaApp(ttk.Window):
         ).pack(anchor="w")
 
         self.command_entry = ttk.Entry(command_frame)
+        self.command_entry.insert(0, "pwd")
+
         self.command_entry.pack(fill=X, pady=5)
 
         self.button_frame = ttk.Frame(self)
@@ -367,12 +353,12 @@ class SentinellaApp(ttk.Window):
             command=self.show_selected
         ).pack(side=LEFT, padx=5)
 
-        ttk.Button(
-            self.button_frame,
-            text="Inicia navegador",
-            bootstyle=INFO,
-            command=self.start_browser
-        ).pack(side=LEFT, padx=5)
+        # ttk.Button(
+        #     self.button_frame,
+        #     text="Inicia navegador",
+        #     bootstyle=INFO,
+        #     command=self.start_browser
+        # ).pack(side=LEFT, padx=5)
 
     def execute_selected_command(self):
 
