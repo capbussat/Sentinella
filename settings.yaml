@@ -10,20 +10,24 @@ settings:
     settings: "/etc/sentinella"
 
 buttons:
+  - title: "Chromium"
+    unique_word: "chromium"
+    style: "success"
+    command: "DISPLAY=:0 nohup /usr/local/bin/start-chromium-kiosk.sh  >/dev/null 2>&1 &"
+    
   - title: "Desactiva internet"
     unique_word: "disable"
-    color: "#FFFFFF"
-    background_color: "#007BFF"
+    style: "warning"
     command: "touch /tmp/sentinella"
 
   - title: "Activa internet"
     unique_word: "enable"
-    color: "#FFFFFF"
-    background_color: "#007BFF"
+    style: "success"
     command: "rm --force /tmp/sentinella"
 
   - title: "Comprova Google"
-    unique_word: "enable"
-    color: "#FFFFFF"
-    background_color: "#007BFF"
-    command: "ping -c 4 www.google.com"
+    unique_word: "google"
+    style: "info"
+    command: "ping -c 4 www.google.com >/dev/null 2>&1 && echo 'WARNING internet no esta desconnectada' || echo 'SUCCESS: inaccessible'"
+
+ 
