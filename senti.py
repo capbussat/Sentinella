@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # senti.py
 
+import PIL._tkinter_finder #  important per pyinstaller
 from fabric import Connection
 import os
 import yaml
@@ -120,9 +121,10 @@ def run_commands(hosts, title: str, command: str):
 # ---------------------------------------------------------------------
 
 class SentinellaApp(ttk.Window):
+    
    
     def __init__(self):
-        super().__init__(themename="cosmo")
+        super().__init__(themename="superhero")
         self.buttons_config = []
 
         config = load_settings_yaml()
@@ -148,14 +150,13 @@ class SentinellaApp(ttk.Window):
 
             title = btn.get("title", "Button")
             command = btn.get("command", "")
-            bg = btn.get("background_color", "#007BFF")
-            fg = btn.get("color", "#FFFFFF")
+            style= btn.get("style","PRIMARY")
 
             ttk.Button(
-                self.button_low_frame,
+                self.button_high_frame,
                 text=title,
                 command=lambda c=command, t=title: self.run_dynamic_command(t, c),
-                bootstyle=PRIMARY
+                bootstyle=style,
             ).pack(side=LEFT, padx=5)
 
     def run_dynamic_command(self, title, command):
@@ -243,6 +244,9 @@ class SentinellaApp(ttk.Window):
             padx=10,
             pady=10
         )
+
+        self.button_high_frame = ttk.Frame(self)
+        self.button_high_frame.pack(fill=X, padx=10, pady=10)
 
         # Frame principal esquerra/dreta
         self.main_frame = ttk.Frame(self)
@@ -334,8 +338,6 @@ class SentinellaApp(ttk.Window):
 
         self.button_frame = ttk.Frame(self)
         self.button_frame.pack(fill=X, padx=10, pady=10)
-        self.button_low_frame = ttk.Frame(self)
-        self.button_low_frame.pack(fill=X, padx=10, pady=10)
 
         ttk.Button(
             self.button_frame,

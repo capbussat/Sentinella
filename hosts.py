@@ -9,6 +9,7 @@ def load_hosts_from_file(filename="hosts") -> list[str]:
 
     if not file_path.exists():
         print(f"[ERROR] File not found: {filename}")
+        raise FileNotFoundError(f"Hosts file not found: {file_path}")
         return []
 
     hosts = []
