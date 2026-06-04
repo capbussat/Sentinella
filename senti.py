@@ -136,14 +136,28 @@ class SentinellaApp(ttk.Window):
             command = btn.get("command", "")
             style= btn.get("style","PRIMARY")
 
-            ttk.Button(
+            button = ttk.Button(
                 self.button_high_frame,
                 text=title,
-                command=lambda c=command, t=title: self.run_dynamic_command(t, c),
                 bootstyle=style,
-            ).pack(side=LEFT, padx=5)
+            )
 
-    def run_dynamic_command(self, title, command):
+            button.config(
+                command=lambda b=button, c=command, t=title:
+                    self.run_dynamic_command(b, t, c)
+            )
+
+            button.pack(side=LEFT, padx=5)            
+
+
+    def run_dynamic_command(self, button, title, command):
+
+        button.config(state="disabled")
+
+        self.after(
+            30000,
+            lambda: button.config(state="normal")
+        )
 
         selected_hosts = [
             host
