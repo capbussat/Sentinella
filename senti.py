@@ -352,15 +352,16 @@ class SentinellaApp(ttk.Window):
 
             self.command_entry.pack(fill=X, pady=5)
 
-            self.button_frame = ttk.Frame(self)
-            self.button_frame.pack(fill=X, padx=10, pady=10)
-
+            
             ttk.Button(
-                self.button_frame,
+                command_frame,
                 text="Executar",
                 bootstyle=DANGER,
                 command=self.execute_selected_command
             ).pack(side=LEFT, padx=5)
+
+        self.button_frame = ttk.Frame(self)
+        self.button_frame.pack(fill=X, padx=10, pady=10)
 
         ttk.Button(
             self.button_frame,
