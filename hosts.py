@@ -31,3 +31,6 @@ def load_hosts_from_file(filename="hosts") -> list[str]:
             hosts.append(line)
 
     return hosts
+
+
+print ("Host loaded")

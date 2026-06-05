@@ -32,12 +32,12 @@ class Settings:
 
 # Global instance
 settings = Settings()
-
+print("Settings loaded")
 # Logging
 # print(" type:" + settings.settings["type"])
 # print(" ssh_ser:" + settings.settings["ssh_user"])
 # print(" ssh_timeout:" + str( settings.settings["ssh_timeout"]))
-print(" max_threads:" + str(settings.settings["max_threads"]))
+# print(" max_threads:" + str(settings.settings["max_threads"]))
 # print(" data: " + settings.settings["directory"]["data"])
 # print(" binary: " + settings.settings["directory"]["binary"])
 # print(" settings: " + settings.settings["directory"]["settings"])

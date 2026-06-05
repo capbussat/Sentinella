@@ -7,6 +7,7 @@ CHECK_FILE=/tmp/sentinella
 
 # Si està aquest fitxer, no cal engegar de nou
 CHECK_ON="/tmp/sentinella-on"
+CHECK_OFF="tmp/sentinella-off"
 
 # log
 LOG="/var/log/sentinella.log"
@@ -92,9 +93,13 @@ if [[ -f "$CHECK_FILE" ]]; then
     fi
         echo "Restrict internet"
         restrict
+        rm -f "$CHECK_OFF"
         touch "$CHECK_ON"
 else
 # elimina en producció la línia echo  
+    if [ -f "$CHECK_OFF" ]; then
+        echo "Continua permetent internet"
+        exit 0
       echo "Allow internet"
         allow
         rm -f "$CHECK_ON"
