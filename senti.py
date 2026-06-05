@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 # senti.py
 
-import PIL._tkinter_finder #  important per pyinstaller
+"""
+Python ttkbootstrap GUi for Sentinella scripts
+
+"""
+
+import PIL._tkinter_finder #  important pyinstaller
 from fabric import Connection
-import os
-import yaml
+import os, ctypes
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
@@ -19,6 +23,16 @@ from hosts import  load_hosts_from_file
 SSH_USER = settings.settings["ssh_user"]
 SSH_TIMEOUT =  settings.settings["ssh_timeout"]
 MAX_THREADS = settings.settings["max_threads"]
+DISABLE_TIME = settings.settings["disable_time"]
+
+def  is_admin():
+    try:
+        admin = os.getuid() == 0
+        return admin 
+    except AttributeError:
+        admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        return admin
+    
 
 # ---------------------------------------------------------------------
 # SSH EXECUTION
@@ -120,7 +134,8 @@ class SentinellaApp(ttk.Window):
         self.geometry("1200x700")
 
         self.host_vars = {}
-
+        self.host_checkbuttons = {}
+        
         self.create_widgets()
         self.load_hosts()
         self.create_dynamic_buttons()
@@ -155,7 +170,7 @@ class SentinellaApp(ttk.Window):
         button.config(state="disabled")
 
         self.after(
-            30000,
+            DISABLE_TIME,
             lambda: button.config(state="normal")
         )
 
@@ -322,29 +337,30 @@ class SentinellaApp(ttk.Window):
         self.canvas.pack(side=LEFT, fill=BOTH, expand=True)
         self.scrollbar.pack(side=RIGHT, fill=Y)
 
-        command_frame = ttk.Frame(self)
-        command_frame.pack(fill=X, padx=10, pady=5)
+        if is_admin():
+            command_frame = ttk.Frame(self)
+            command_frame.pack(fill=X, padx=10, pady=5)
 
-        ttk.Label(
-            command_frame,
-            text="Comanda Bash:",
-            font=("Helvetica", 10, "bold")
-        ).pack(anchor="w")
+            ttk.Label(
+                command_frame,
+                text="Comanda Bash:",
+                font=("Helvetica", 10, "bold")
+            ).pack(anchor="w")
 
-        self.command_entry = ttk.Entry(command_frame)
-        self.command_entry.insert(0, "pwd")
+            self.command_entry = ttk.Entry(command_frame)
+            self.command_entry.insert(0, "pwd")
 
-        self.command_entry.pack(fill=X, pady=5)
+            self.command_entry.pack(fill=X, pady=5)
 
-        self.button_frame = ttk.Frame(self)
-        self.button_frame.pack(fill=X, padx=10, pady=10)
+            self.button_frame = ttk.Frame(self)
+            self.button_frame.pack(fill=X, padx=10, pady=10)
 
-        ttk.Button(
-            self.button_frame,
-            text="Executar",
-            bootstyle=DANGER,
-            command=self.execute_selected_command
-        ).pack(side=RIGHT, padx=5)
+            ttk.Button(
+                self.button_frame,
+                text="Executar",
+                bootstyle=DANGER,
+                command=self.execute_selected_command
+            ).pack(side=LEFT, padx=5)
 
         ttk.Button(
             self.button_frame,
@@ -366,13 +382,6 @@ class SentinellaApp(ttk.Window):
             bootstyle=PRIMARY,
             command=self.show_selected
         ).pack(side=LEFT, padx=5)
-
-        # ttk.Button(
-        #     self.button_frame,
-        #     text="Inicia navegador",
-        #     bootstyle=INFO,
-        #     command=self.start_browser
-        # ).pack(side=LEFT, padx=5)
 
     def execute_selected_command(self):
 
@@ -457,6 +466,8 @@ class SentinellaApp(ttk.Window):
                     padx=10,
                     pady=3
                 )
+
+                self.host_checkbuttons[host] = chk
 
         except FileNotFoundError:
             self.append_result(
