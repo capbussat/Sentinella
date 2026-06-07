@@ -25,6 +25,7 @@ SSH_USER = settings.settings["ssh_user"]
 SSH_TIMEOUT =  settings.settings["ssh_timeout"]
 MAX_THREADS = settings.settings["max_threads"]
 DISABLE_TIME = settings.settings["disable_time"]
+COLUMN_GRID = 4
 
 def  is_admin():
     try:
@@ -136,7 +137,6 @@ class SentinellaApp(ttk.Window):
 
         self.host_vars = {}
         self.host_checkbuttons = {}
-        self.results
         
         self.create_widgets()
         self.load_hosts()
@@ -191,13 +191,14 @@ class SentinellaApp(ttk.Window):
         )
 
         self.show()
-            
         output = f"\n=== {title.upper()} ===\n\n"
 
         for r in self.results:
-            output += f"{r['host']}: {r['success']}\n"
-
-        self.append_result(output)
+            if r.get('success'):
+                output += f"{r['host']}: Ok  {r.get('stdout', '')} \n"
+            else:
+                output += f"{r['host']}: {r.get('stderr', '')}\n"
+            self.append_result(output)
 
 
     def create_widgets(self):
@@ -220,7 +221,7 @@ class SentinellaApp(ttk.Window):
 
         self.main_frame.rowconfigure(0, weight=1)
         self.main_frame.columnconfigure(0, weight=1)  # Hosts
-        self.main_frame.columnconfigure(1, weight=2)  # Central
+        self.main_frame.columnconfigure(1, weight=2)  # Graella
         self.main_frame.columnconfigure(2, weight=1)  # Resultats
 
         # =========================================================
@@ -258,14 +259,14 @@ class SentinellaApp(ttk.Window):
         self.scrollbar.pack(side=RIGHT, fill=Y)
 
         # =========================================================
-        # COL 1 → GRAELLA CENTRAL
+        # COL 1 → GRAELLA
         # =========================================================
-        self.frame_central = ttk.LabelFrame(self.main_frame, text="Graella")
-        self.frame_central.grid(row=0, column=1, sticky="nsew", padx=5)
+        self.frame_grid = ttk.LabelFrame(self.main_frame, text="Graella")
+        self.frame_grid.grid(row=0, column=1, sticky="nsew", padx=5)
 
         # IMPORTANT: fer-la responsive
         for i in range(4):
-            self.frame_central.columnconfigure(i, weight=1)
+            self.frame_grid.columnconfigure(i, weight=1)
 
         # =========================================================
         # COL 2 → RESULTATS
@@ -357,36 +358,6 @@ class SentinellaApp(ttk.Window):
             # problema
             results = run_commands(selected_hosts, "Comanda BASH", command)
 
-            output = ""
-            for r in results:
-                lines = [
-                    f"[{r['host']}]",
-                    f"SUCCESS: {r['success']}"
-                ]
-                
-                if r['stdout']:
-                    lines.extend([
-                        "",
-                        "STDOUT:",
-                        r['stdout']
-                    ])
-
-                if r['stderr']:
-                    lines.extend([
-                        "",
-                        "STDERR:",
-                        r['stderr']
-                    ])
-
-                lines.append("-" * 40)
-            
-                output += "\n".join(lines) + "\n\n"
-            
-            self.result_text.configure(state="normal")
-            self.result_text.delete("1.0", "end")
-            self.result_text.insert("1.0", output)
-            self.result_text.configure(state="disabled")
-
         except Exception as e:
             self.append_result(
                 f"[ERROR] {e}"
@@ -458,35 +429,36 @@ class SentinellaApp(ttk.Window):
 
     def show(self):
 
-        selected_hosts = [
-            host
-            for host, var in self.host_vars.items()
-            if var.get()
-        ]
-
         # netejar graella anterior
-        for widget in self.frame_central.winfo_children():
+        for widget in self.frame_grid.winfo_children():
             widget.destroy()
 
-        cols = 4
+        cols = COLUMN_GRID
+        if self.results:
+            for i, result in enumerate(self.results):
+                if result['success']:
+                    style = 'success'
+                else:
+                    style= 'secondary' 
 
-        for i, host in enumerate(selected_hosts):
-            print(i)
-            row = i // cols
-            col = i % cols
-           
-            btn = ttk.Button(
-                self.frame_central,
-                text=host,
-                bootstyle="info"
-            )
+                btn = ttk.Button(
+                    self.frame_grid,
+                    text=result['host'],
+                    bootstyle= style
+                )
 
-            btn.grid(row=row, column=col, sticky="nsew", padx=3, pady=3)
+                row = i // cols
+                col = i % cols
+            
+                btn.grid(row=row, column=col, sticky="nsew", padx=3, pady=3)
 
         # opcional: fer responsive
         for c in range(cols):
-            self.frame_central.columnconfigure(c, weight=1)
+            self.frame_grid.columnconfigure(c, weight=1)
 
+
+                    
+                    
 
         
 if __name__ == "__main__":
