@@ -30,6 +30,9 @@ def load_hosts_from_file(filename="hosts") -> list[str]:
 
             hosts.append(line)
 
+        # garanteix unicitat
+        hosts = list(dict.fromkeys(hosts))   
+
     return hosts
 
 

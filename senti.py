@@ -10,6 +10,7 @@ import PIL._tkinter_finder #  important pyinstaller
 from fabric import Connection
 import os, ctypes
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 # from tkinter import messagebox
@@ -131,10 +132,11 @@ class SentinellaApp(ttk.Window):
         self.buttons_config = settings.buttons
 
         self.title("Sentinella GUI")
-        self.geometry("1200x700")
+        self.geometry("1200x800")
 
         self.host_vars = {}
         self.host_checkbuttons = {}
+        self.results
         
         self.create_widgets()
         self.load_hosts()
@@ -167,13 +169,6 @@ class SentinellaApp(ttk.Window):
 
     def run_dynamic_command(self, button, title, command):
 
-        button.config(state="disabled")
-
-        self.after(
-            DISABLE_TIME,
-            lambda: button.config(state="normal")
-        )
-
         selected_hosts = [
             host
             for host, var in self.host_vars.items()
@@ -186,62 +181,24 @@ class SentinellaApp(ttk.Window):
             )
             return
 
-        try:
-            results = run_commands(selected_hosts, title, command)
+        button.config(state="disabled")
+        self.update_idletasks()
 
-            output = f"\n=== {title.upper()} ===\n\n"
+        self.results = run_commands(selected_hosts, title, command)
+        self.after(
+            DISABLE_TIME,
+            lambda b=button: b.config(state="normal")
+        )
 
-            for r in results:
-                output += f"{r['host']}: {r['success']}\n"
+        self.show()
+            
+        output = f"\n=== {title.upper()} ===\n\n"
 
-            self.append_result(output)
+        for r in self.results:
+            output += f"{r['host']}: {r['success']}\n"
 
-        except Exception as e:
-            self.append_result(
-                f"[ERROR {title}] {e}"
-            )
+        self.append_result(output)
 
-    # def start_browser(self):
-
-    #     selected_hosts = [
-    #         host
-    #         for host, var in self.host_vars.items()
-    #         if var.get()
-    #     ]
-
-    #     if not selected_hosts:
-    #         self.append_result(
-    #             "[WARNING] Selecciona almenys un host."
-    #         )
-    #         return
-
-    #     command = "DISPLAY=:0 nohup /usr/local/bin/start-chromium-kiosk.sh  >/dev/null 2>&1 &"
-    #     try:
-
-    #         results = run_commands(
-    #             selected_hosts,
-    #             "Inicia el navegador",
-    #             command
-    #         )
-
-    #         output = "\n=== INICI NAVEGADOR ===\n\n"
-
-    #         for r in results:
-
-    #             output += (
-    #                 f"{r['host']}: "
-    #                 f"{r['success']}\n"
-    #             )
-
-    #         output += "\n"
-
-    #         self.append_result(output)
-
-    #     except Exception as e:
-
-    #         self.append_result(
-    #             f"[ERROR] {e}"
-    #         )
 
     def create_widgets(self):
 
@@ -250,65 +207,29 @@ class SentinellaApp(ttk.Window):
             text="Llista de Hosts",
             font=("Helvetica", 16, "bold")
         )
-        
-        title.pack(
-            anchor="w",
-            fill=X,
-            padx=10,
-            pady=10
-        )
+        title.pack(anchor="w", fill=X, padx=10, pady=10)
 
         self.button_high_frame = ttk.Frame(self)
         self.button_high_frame.pack(fill=X, padx=10, pady=10)
 
-        # Frame principal esquerra/dreta
+        # =========================================================
+        # CONTENIDOR PRINCIPAL (GRID 3 COLUMNES)
+        # =========================================================
         self.main_frame = ttk.Frame(self)
-        self.main_frame.pack(
-            fill=BOTH,
-            expand=True,
-            padx=10,
-            pady=10
-        )
+        self.main_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
 
-        # Hosts
-        self.frame_hosts = ttk.LabelFrame(
-            self.main_frame,
-            text="Hosts"
-        )
-        self.frame_hosts.pack(
-            side=LEFT,
-            fill=BOTH,
-            expand=True,
-            padx=(0, 5)
-        )
+        self.main_frame.rowconfigure(0, weight=1)
+        self.main_frame.columnconfigure(0, weight=1)  # Hosts
+        self.main_frame.columnconfigure(1, weight=2)  # Central
+        self.main_frame.columnconfigure(2, weight=1)  # Resultats
 
-        # Resultats
-        self.frame_results = ttk.LabelFrame(
-            self.main_frame,
-            text="Resultats"
-        )
-        
-        self.frame_results.pack(
-            side=RIGHT,
-            fill=BOTH,
-            expand=True,
-            padx=(5, 0)
-        )
-        
-        self.result_text = ttk.Text(
-            self.frame_results,
-            wrap="word"
-        )
+        # =========================================================
+        # COL 0 → HOSTS
+        # =========================================================
+        self.frame_hosts = ttk.LabelFrame(self.main_frame, text="Hosts")
+        self.frame_hosts.grid(row=0, column=0, sticky="nsew", padx=(0, 5))
 
-        self.result_text.pack(
-            fill=BOTH,
-            expand=True,
-            padx=5,
-            pady=5
-        )
-
-        self.result_text.configure(state="disabled")
-        
+        # Canvas scroll dins hosts
         self.canvas = ttk.Canvas(self.frame_hosts)
         self.scrollbar = ttk.Scrollbar(
             self.frame_hosts,
@@ -317,6 +238,7 @@ class SentinellaApp(ttk.Window):
         )
 
         self.scrollable_frame = ttk.Frame(self.canvas)
+
         self.scrollable_frame.bind(
             "<Configure>",
             lambda e: self.canvas.configure(
@@ -330,13 +252,38 @@ class SentinellaApp(ttk.Window):
             anchor="nw"
         )
 
-        self.canvas.configure(
-            yscrollcommand=self.scrollbar.set
-        )
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
         self.canvas.pack(side=LEFT, fill=BOTH, expand=True)
         self.scrollbar.pack(side=RIGHT, fill=Y)
 
+        # =========================================================
+        # COL 1 → GRAELLA CENTRAL
+        # =========================================================
+        self.frame_central = ttk.LabelFrame(self.main_frame, text="Graella")
+        self.frame_central.grid(row=0, column=1, sticky="nsew", padx=5)
+
+        # IMPORTANT: fer-la responsive
+        for i in range(4):
+            self.frame_central.columnconfigure(i, weight=1)
+
+        # =========================================================
+        # COL 2 → RESULTATS
+        # =========================================================
+        self.frame_results = ttk.LabelFrame(self.main_frame, text="Resultats")
+        self.frame_results.grid(row=0, column=2, sticky="nsew", padx=(5, 0))
+
+        self.result_text = ttk.Text(self.frame_results, wrap="word")
+        self.result_text.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
+
+        self.frame_results.rowconfigure(0, weight=1)
+        self.frame_results.columnconfigure(0, weight=1)
+
+        self.result_text.configure(state="disabled")
+
+        # =========================================================
+        # COMANDES ADMIN (fora del grid principal)
+        # =========================================================
         if is_admin():
             command_frame = ttk.Frame(self)
             command_frame.pack(fill=X, padx=10, pady=5)
@@ -349,7 +296,6 @@ class SentinellaApp(ttk.Window):
 
             self.command_entry = ttk.Entry(command_frame)
             self.command_entry.insert(0, "pwd")
-
             self.command_entry.pack(fill=X, pady=5)
 
             
@@ -407,6 +353,7 @@ class SentinellaApp(ttk.Window):
             return
 
         try:
+
             # problema
             results = run_commands(selected_hosts, "Comanda BASH", command)
 
@@ -509,6 +456,39 @@ class SentinellaApp(ttk.Window):
         self.result_text.see("end")
         self.result_text.configure(state="disabled")
 
+    def show(self):
+
+        selected_hosts = [
+            host
+            for host, var in self.host_vars.items()
+            if var.get()
+        ]
+
+        # netejar graella anterior
+        for widget in self.frame_central.winfo_children():
+            widget.destroy()
+
+        cols = 4
+
+        for i, host in enumerate(selected_hosts):
+            print(i)
+            row = i // cols
+            col = i % cols
+           
+            btn = ttk.Button(
+                self.frame_central,
+                text=host,
+                bootstyle="info"
+            )
+
+            btn.grid(row=row, column=col, sticky="nsew", padx=3, pady=3)
+
+        # opcional: fer responsive
+        for c in range(cols):
+            self.frame_central.columnconfigure(c, weight=1)
+
+
+        
 if __name__ == "__main__":
     app = SentinellaApp()
     app.mainloop()

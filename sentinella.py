@@ -304,7 +304,7 @@ def main(page: ft.Page):
             try:
                 threading.Thread(
                     target=run_commands,
-                    args=(command)
+                    args=(command),
                     daemon=True,
                 ).start()
             
