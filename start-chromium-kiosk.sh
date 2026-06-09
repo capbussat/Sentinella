@@ -1,5 +1,8 @@
 #!/bin/bash
-# Substitute the prefrred starting domain on last line
+# Substitute the prefrerred starting domain on last line
+# Install ./install-chromium-policies.sh.sh on pupils computers
+# Requires running ssh server on pupils computers accessible with ssh keys
+
 DISPLAY=:0 nohup chromium \
     --no-first-run \
     --disable \
