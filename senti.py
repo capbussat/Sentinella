@@ -8,6 +8,12 @@ pip install fabric ttkbootstrap
 
 python3 senti.py
 
+Install on teacher computer.
+Edit hosts file.
+Edit settings.yaml file and change user.
+Requires SSH server on pupils conputers, accessible with SSK keys
+
+
 """
 
 import PIL._tkinter_finder #  important pyinstaller
