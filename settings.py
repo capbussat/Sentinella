@@ -3,8 +3,10 @@
 from pathlib import Path
 import yaml
 
+SETTINGS_YAML_FILE = "/etc/sentinella/settings.yaml"
+
 class Settings:
-    def __init__(self, filename="settings.yaml"):
+    def __init__(self, filename=SETTINGS_YAML_FILE):
         self.filename = Path(filename)
         self.data = self._load()
 

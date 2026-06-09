@@ -2,8 +2,9 @@
 
 from pathlib import Path
 
+HOSTS = "/etc/sentinella/hosts"
 
-def load_hosts_from_file(filename="hosts") -> list[str]:
+def load_hosts_from_file(filename=HOSTS) -> list[str]:
 
     file_path = Path(filename)
 

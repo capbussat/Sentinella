@@ -31,4 +31,8 @@ buttons:
     style: "info"
     command: "ping -c 4 www.google.com >/dev/null 2>&1 && echo 'WARNING internet no esta desconnectada' || echo 'SUCCESS: inaccessible'"
 
+  - title: "Comprova usuaris"
+    unique_word: "usuaris"
+    style: "info"
+    command: "who | awk '{print $1}'"
  
