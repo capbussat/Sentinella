@@ -4,6 +4,10 @@
 """
 Python ttkbootstrap GUi for Sentinella scripts
 
+pip install fabric ttkbootstrap
+
+python3 senti.py
+
 """
 
 import PIL._tkinter_finder #  important pyinstaller
