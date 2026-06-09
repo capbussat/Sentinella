@@ -1,6 +1,8 @@
 #!/bin/bash
 # sentinella.sh
-# place the CHECK_FILE on your system to start internet restrictions. 
+# place the CHECK_FILE on each pupil to start internet restrictions. You can made this with Sentinella GUI. See senti.py 
+# Install ./install-sentinella.sh on pupils computer
+# Requires running ssh server on pupils computers accessible with ssh keys
 
 # remove this file to stop internet restrictions.
 CHECK_FILE=/tmp/sentinella

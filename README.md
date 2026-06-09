@@ -29,6 +29,8 @@ pip install ttkbootstrap fabric pyyaml pyinstaller\
 
 python3 senti.py\
 
+# Distribute executable
+
 Create a senti file to distribute the Python GUI:
 
 pyinstaller --onefile --noconsole senti.py
