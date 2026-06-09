@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Sentinella és la coorrecció de Thread
+# Sentinella amb Flet
 
 """
 Flet + Fabric multithreaded SSH executor.
