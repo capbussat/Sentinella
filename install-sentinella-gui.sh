@@ -19,16 +19,36 @@ if [[ $EUID -ne 0 ]]; then
   exec sudo bash "$0" "$@"
 fi
 
-sudo cp senti /usr/local/bin
-echo "cp senti /usr/local/bin"
+coin() {
+    local src="$1"
+    local dest="$2"
 
-sudo cp sentinella.desktop /usr/share/applications/
-echo "cp sentinella.desktop /usr/share/applications/"
+    #dest inclou el nom del fitxer
 
+    if [ -f "$dest" ]; then
+        # Si el dest és més recent o igual, no es copia
+        echo "Ja existeix: $dest"
+    
+        if [ "$src" -ot "$dest" ]; then
+            return 0
+        fi
+    fi
+
+    if cp "$src" "$dest"; then
+        echo "Copiat: $src -> $dest"
+    else
+        echo "Error copiant $src to $dest" >&2
+        return 1
+    fi
+}
+
+coin sentinella /usr/local/bin/sentinella
+coin sentinella.desktop /usr/share/applications/sentinella.desktop
+chmod +x /usr/share/applications/sentinella.desktop
+echo "Fes sentinella.desktop executable per obrir l'aplicació."
+coin assets/images/sentinella.svg /usr/share/icons/hicolor/scalable/apps/sentinella.svg
+coin assets/images/sentinella.png /usr/share/icons/hicolor/48x48/apps/sentinella.png
 sudo mkdir -p /etc/sentinella
-echo  "mkdir -p /etc/sentinella"
-
-sudo cp settings.yaml /etc/sentinella 
-echo "cp settings.yaml /etc/sentinella"
-
+coin hosts /etc/sentinella/hosts
+coin settings.yaml /etc/sentinella/settings.yaml
 echo "Fet!"
