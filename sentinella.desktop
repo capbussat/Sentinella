@@ -1,9 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
+Version=1.0
 Name=Sentinella
 Comment=Sentinella GUI for Sentinella scripts.
-Version=1.0
+Exec=sentinella
+Icon=sentinella
 Terminal=false
-Exec=/usr/local/bin/senti
-Icon=/usr/share/icons/senti.png
+Categories=Utility;System;
