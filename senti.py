@@ -202,6 +202,10 @@ class SentinellaApp(ttk.Window):
         self.show()
         output = f"\n=== {title.upper()} ===\n\n"
 
+        if not self.results:
+            self.append_result("No hi ha resultats per mostrar.\n")
+        return
+
         for r in self.results:
             if r.get('success'):
                 output += f"{r['host']}: Ok  {r.get('stdout', '')} \n"
@@ -215,7 +219,7 @@ class SentinellaApp(ttk.Window):
 
         title = ttk.Label(
             self,
-            text="Llista de Hosts",
+            text="Sentinella",
             font=("Helvetica", 16, "bold")
         )
         title.pack(anchor="w", fill=X, padx=10, pady=10)
@@ -231,8 +235,8 @@ class SentinellaApp(ttk.Window):
 
         self.main_frame.rowconfigure(0, weight=1)
         self.main_frame.columnconfigure(0, weight=1, minsize=400)  # Hosts
-        self.main_frame.columnconfigure(1, weight=4, minsize=400)  # Graella
-        self.main_frame.columnconfigure(2, weight=1, minsize=400)  # Resultats
+        self.main_frame.columnconfigure(1, weight=2, minsize=400)  # Graella
+        self.main_frame.columnconfigure(2, weight=0, minsize=400)  # Resultats
 
         # =========================================================
         # COL 0 → HOSTS
