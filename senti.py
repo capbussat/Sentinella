@@ -23,6 +23,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
+import tkinter as tk  
 # from tkinter import messagebox
 from settings import settings
 from hosts import  load_hosts_from_file
@@ -134,8 +135,8 @@ def run_commands(hosts, title: str, command: str):
 # ---------------------------------------------------------------------
 
 class SentinellaApp(ttk.Window):
-    
-   
+
+
     def __init__(self):
         super().__init__(themename="superhero")
         self.buttons_config = []
@@ -147,7 +148,6 @@ class SentinellaApp(ttk.Window):
 
         self.host_vars = {}
         self.host_checkbuttons = {}
-        
         self.create_widgets()
         self.load_hosts()
         self.create_dynamic_buttons()
@@ -174,8 +174,7 @@ class SentinellaApp(ttk.Window):
                     self.run_dynamic_command(b, t, c)
             )
 
-            button.pack(side=LEFT, padx=5)            
-
+            button.pack(side=LEFT, padx=5)
 
     def run_dynamic_command(self, button, title, command):
 
@@ -208,7 +207,8 @@ class SentinellaApp(ttk.Window):
                 output += f"{r['host']}: Ok  {r.get('stdout', '')} \n"
             else:
                 output += f"{r['host']}: {r.get('stderr', '')}\n"
-            self.append_result(output)
+        
+        self.append_result(output)
 
 
     def create_widgets(self):
@@ -230,9 +230,9 @@ class SentinellaApp(ttk.Window):
         self.main_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
 
         self.main_frame.rowconfigure(0, weight=1)
-        self.main_frame.columnconfigure(0, weight=1)  # Hosts
-        self.main_frame.columnconfigure(1, weight=2)  # Graella
-        self.main_frame.columnconfigure(2, weight=1)  # Resultats
+        self.main_frame.columnconfigure(0, weight=1, minsize=400)  # Hosts
+        self.main_frame.columnconfigure(1, weight=4, minsize=400)  # Graella
+        self.main_frame.columnconfigure(2, weight=1, minsize=400)  # Resultats
 
         # =========================================================
         # COL 0 → HOSTS
@@ -241,13 +241,12 @@ class SentinellaApp(ttk.Window):
         self.frame_hosts.grid(row=0, column=0, sticky="nsew", padx=(0, 5))
 
         # Canvas scroll dins hosts
-        self.canvas = ttk.Canvas(self.frame_hosts)
+        self.canvas = tk.Canvas(self.frame_hosts)
         self.scrollbar = ttk.Scrollbar(
             self.frame_hosts,
             orient=VERTICAL,
             command=self.canvas.yview
         )
-
         self.scrollable_frame = ttk.Frame(self.canvas)
 
         self.scrollable_frame.bind(
@@ -257,14 +256,22 @@ class SentinellaApp(ttk.Window):
             )
         )
 
-        self.canvas.create_window(
+        self._canvas_window_id = self.canvas.create_window(
             (0, 0),
             window=self.scrollable_frame,
             anchor="nw"
         )
 
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.canvas.bind(
+            "<Configure>",
+            lambda e: self.canvas.itemconfig(
+                self._canvas_window_id,
+                width=e.width
+            )
+        )
 
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        
         self.canvas.pack(side=LEFT, fill=BOTH, expand=True)
         self.scrollbar.pack(side=RIGHT, fill=Y)
 
@@ -275,7 +282,7 @@ class SentinellaApp(ttk.Window):
         self.frame_grid.grid(row=0, column=1, sticky="nsew", padx=5)
 
         # IMPORTANT: fer-la responsive
-        for i in range(4):
+        for i in range(COLUMN_GRID):
             self.frame_grid.columnconfigure(i, weight=1)
 
         # =========================================================
@@ -284,7 +291,7 @@ class SentinellaApp(ttk.Window):
         self.frame_results = ttk.LabelFrame(self.main_frame, text="Resultats")
         self.frame_results.grid(row=0, column=2, sticky="nsew", padx=(5, 0))
 
-        self.result_text = ttk.Text(self.frame_results, wrap="word")
+        self.result_text = tk.Text(self.frame_results, wrap="word")
         self.result_text.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
 
         self.frame_results.rowconfigure(0, weight=1)
@@ -342,7 +349,9 @@ class SentinellaApp(ttk.Window):
         ).pack(side=LEFT, padx=5)
 
     def execute_selected_command(self):
-
+        if not is_admin():
+            return
+        
         command = self.command_entry.get().strip()
 
         if not command:
