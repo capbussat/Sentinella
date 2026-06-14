@@ -1,40 +1,47 @@
 #!/usr/bin/env python3
 
+#!/usr/bin/env python3
 from pathlib import Path
+from dataclasses import dataclass
 
 HOSTS = "/etc/sentinella/hosts"
 
-def load_hosts_from_file(filename=HOSTS) -> list[str]:
+@dataclass
+class Host:
+    ip: str
+    label: str
 
+    def __str__(self) -> str:
+        return f"{self.label} ({self.ip})"
+
+
+def load_hosts_from_file(filename: str = HOSTS) -> list[Host]:
     file_path = Path(filename)
 
     if not file_path.exists():
-        print(f"[ERROR] File not found: {filename}")
         raise FileNotFoundError(f"Hosts file not found: {file_path}")
-        return []
 
-    hosts = []
+    hosts: dict[str, Host] = {}  # clau=ip, garanteix unicitat
 
     with open(file_path, "r", encoding="utf-8") as f:
-
-        for line in f:
-
+        for lineno, line in enumerate(f, start=1):
             line = line.strip()
 
-            # Ignore empty lines
-            if not line:
+            if not line or line.startswith("#"):
                 continue
 
-            # Ignore comments
-            if line.startswith("#"):
+            parts = line.split()
+
+            if len(parts) == 0:
                 continue
 
-            hosts.append(line)
+            ip = parts[0]
+            label = parts[1] if len(parts) > 1 else ip  # fallback a la IP
 
-        # garanteix unicitat
-        hosts = list(dict.fromkeys(hosts))   
+            if ip in hosts:
+                print(f"[WARN] IP duplicada a la línia {lineno}: {ip} — ignorada")
+                continue
 
-    return hosts
+            hosts[ip] = Host(ip=ip, label=label)
 
-
-print ("Host loaded")
+    return list(hosts.values())
