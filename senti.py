@@ -194,26 +194,27 @@ class SentinellaApp(ttk.Window):
         self.update_idletasks()
 
         self.results = run_commands(selected_hosts, title, command)
+        
         self.after(
             DISABLE_TIME,
             lambda b=button: b.config(state="normal")
         )
 
         self.show()
+            
         output = f"\n=== {title.upper()} ===\n\n"
-
+    
         if not self.results:
-            self.append_result("No hi ha resultats per mostrar.\n")
-        return
+            output += ">>> No hi ha resultats\n"
 
         for r in self.results:
             if r.get('success'):
                 output += f"{r['host']}: Ok  {r.get('stdout', '')} \n"
             else:
                 output += f"{r['host']}: {r.get('stderr', '')}\n"
-        
+    
         self.append_result(output)
-
+        
 
     def create_widgets(self):
 
@@ -394,11 +395,11 @@ class SentinellaApp(ttk.Window):
             for host in hosts:
 
                 var = ttk.BooleanVar(value=False)
-                self.host_vars[host] = var
+                self.host_vars[host.ip] = var
 
                 chk = ttk.Checkbutton(
                     self.scrollable_frame,
-                    text=host,
+                    text= host.label + ": " + host.ip,
                     variable=var,
                     bootstyle="round-toggle"
                 )
@@ -409,7 +410,7 @@ class SentinellaApp(ttk.Window):
                     pady=3
                 )
 
-                self.host_checkbuttons[host] = chk
+                self.host_checkbuttons[host.ip] = chk
 
         except FileNotFoundError:
             self.append_result(
