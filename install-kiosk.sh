@@ -1,6 +1,7 @@
 #!/bin/bash
 KIOSK_URL="https://campus.institutpedralbes.cat"
 KIOSK_USER="kiosk"
+KIOSK_PASSWORD="kiosk"
 
 echo "- Crea un usuari kiosk"
 echo "- Bloqueja-li el terminal"
@@ -21,7 +22,7 @@ if id "$KIOSK_USER" &>/dev/null; then
   echo "L'usuari '$KIOSK_USER' ja existeix. S'omet la creació de l'usuari."
 else
   adduser --disabled-password --gecos "" "$KIOSK_USER"
-  passwd "$KIOSK_USER"
+  passwd "$KIOSK_PASSWORD"
   echo "- Crea un usuari kiosk Fet!"
 fi
 
