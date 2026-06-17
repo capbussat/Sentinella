@@ -1,15 +1,23 @@
 #!/bin/bash
 # sentinella.sh
-# place the CHECK_FILE on each pupil to start internet restrictions. You can made this with Sentinella GUI. See senti.py 
+# place the CHECK_INTERNET on each pupil to start internet restrictions. You can made this with Sentinella GUI. See senti.py 
 # Install ./install-sentinella.sh on pupils computer
 # Requires running ssh server on pupils computers accessible with ssh keys
 
+# --- Comprovació: cal executar com a root ---
+if [ "$EUID" -ne 0 ]; then
+  die "Executa aquest script com a root: sudo bash $0"
+fi
+
 # remove this file to stop internet restrictions.
-CHECK_FILE=/tmp/sentinella
+CHECK_INTERNET=/tmp/sentinella_internet
+CHECK_BROWSER=/tmp/sentinella_browser
 
 # Si està aquest fitxer, no cal engegar de nou
 CHECK_ON="/tmp/sentinella-on"
 CHECK_OFF="tmp/sentinella-off"
+CHECK_BROWSER_ON="/tmp/sentinella-on"
+CHECK_BROWSER_OFF="tmp/sentinella-off"
 
 # log
 LOG="/var/log/sentinella.log"
@@ -88,21 +96,43 @@ echo "Sentinella is OFF"
 }
 
 
-if [[ -f "$CHECK_FILE" ]]; then
-    if [ -f "$CHECK_ON" ]; then
-        echo "Continua restict internet"
+if [[ -f "$CHECK_INTERNET" ]]; then
+    if [[ -f "$CHECK_ON" ]]; then
+        echo "Continua restrict internet"
         exit 0
     fi
-        echo "Restrict internet"
-        restrict
-        rm -f "$CHECK_OFF"
-        touch "$CHECK_ON"
+    echo "Restrict internet"
+    restrict
+    rm -f "$CHECK_OFF"
+    touch "$CHECK_ON"
 else
 # elimina en producció la línia echo  
-    if [ -f "$CHECK_OFF" ]; then
+    if [[ -f "$CHECK_OFF" ]]; then
         echo "Continua permetent internet"
         exit 0
+    fi
       echo "Allow internet"
         allow
         rm -f "$CHECK_ON"
+    
+fi
+
+if [[ -f "$CHECK_BROWSER"]]; then
+    if [[ -f "$CHECK_BROWSER_ON" ]]; then
+        echo "Continua actiu el navegador"
+        exit 0
+    fi
+        echo "Inicia el navegador"
+        # start-chromium-kiosk.sh
+        rm -f "$CHECK_BROWSER_OFF"
+        touch "$CHECK_BROWSER_ON"
+else
+# elimina en producció la línia echo  
+    if [[ -f "$CHECK_BROWSER_OFF" ]]; then
+        echo "No engeguis el navegador"
+        exit 0
+    fi
+    echo "Apaga el navegador"
+    #  apaga?
+    rm -f "$CHECK_BROWSER_ON"
 fi
