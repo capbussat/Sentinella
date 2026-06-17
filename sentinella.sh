@@ -15,9 +15,9 @@ CHECK_BROWSER=/tmp/sentinella_browser
 
 # Si està aquest fitxer, no cal engegar de nou
 CHECK_ON="/tmp/sentinella-on"
-CHECK_OFF="tmp/sentinella-off"
-CHECK_BROWSER_ON="/tmp/sentinella-on"
-CHECK_BROWSER_OFF="tmp/sentinella-off"
+CHECK_OFF="/tmp/sentinella-off"            
+CHECK_BROWSER_ON="/tmp/sentinella-browser-on"
+CHECK_BROWSER_OFF="/tmp/sentinella-browser-off"
 
 # log
 LOG="/var/log/sentinella.log"
@@ -68,9 +68,9 @@ fi
     ufw allow out proto tcp to any port 53
     ufw enable
     ufw status verbose
-    echo "$log_date Enabled UFW rules " >>  "${LOG}"
     touch "${CHECK_ON}"
-    echo "$log_date Set ${CHECK_ON} " >>  "${LOG}"
+    echo "$(log_date) Enabled UFW rules" >> "${LOG}"
+    echo "$(log_date) Set ${CHECK_ON}" >> "${LOG}"
 }
 
 allow() {
@@ -88,11 +88,11 @@ ufw default allow outgoing
     ufw allow to any port 53
 # final
     ufw --force enable
-    ufw verbose
+    ufw status verbose
     rm -f "${SENTINELLA_IS_ON}"
 echo "Sentinella is OFF"
     rm -f "${CHECK_ON}"
-    echo "$log_date Disabled UFW rules " >>  "${LOG}"
+    echo "$(log_date) Disabled UFW rules" >> "${LOG}"
 }
 
 
