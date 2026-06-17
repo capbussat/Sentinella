@@ -117,7 +117,7 @@ else
     
 fi
 
-if [[ -f "$CHECK_BROWSER"]]; then
+if [[ -f "$CHECK_BROWSER" ]]; then
     if [[ -f "$CHECK_BROWSER_ON" ]]; then
         echo "Continua actiu el navegador"
         exit 0
@@ -127,7 +127,7 @@ if [[ -f "$CHECK_BROWSER"]]; then
         rm -f "$CHECK_BROWSER_OFF"
         touch "$CHECK_BROWSER_ON"
 else
-# elimina en producció la línia echo  
+# elimina en producció la línia echo
     if [[ -f "$CHECK_BROWSER_OFF" ]]; then
         echo "No engeguis el navegador"
         exit 0
