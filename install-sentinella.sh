@@ -7,9 +7,15 @@
 
 # set -e option instructs bash to immediately exit if any command has a non-zero exit status.
 # set -u if variable does not exist causes the program to immediately exit.
-# set -x all executed commands are printed to the terminal. 
-#  set -o pipefail prevents errors in a pipeline from being masked# 
+# set -o pipefail prevents errors in a pipeline from being masked# 
 set -euo pipefail
+
+# --- Constants ---
+LOG="/var/log/sentinella.log"
+
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M')] $*" | tee -a "$LOG"
+}
 
 # --- Colors ---
 GREEN="\033[0;32m"
@@ -106,3 +112,5 @@ echo "  systemctl status sentinella.service  → Estat del servei"
 echo "  journalctl -u sentinella.service -f  → Logs en temps real"
 echo "  systemctl stop sentinella.timer      → Aturar el timer"
 echo "  systemctl disable sentinella.timer   → Desactivar a l'arrencada"
+
+log "Sentinella instal·lat correctament"
