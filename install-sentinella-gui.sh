@@ -1,5 +1,6 @@
 #!/bin/bash
 # ./install-sentinella-gui.sh
+# Instal·la en el ordinador de control o professor
 
 # set -e option instructs bash to immediately exit if any command has a non-zero exit status.
 # set -u if variable does not exist causes the program to immediately exit.
