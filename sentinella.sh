@@ -92,6 +92,7 @@ ufw default allow outgoing
     rm -f "${SENTINELLA_IS_ON}"
 echo "Sentinella is OFF"
     rm -f "${CHECK_ON}"
+    touch "${CHECK_OFF}"
     echo "$(log_date) Disabled UFW rules" >> "${LOG}"
 }
 
