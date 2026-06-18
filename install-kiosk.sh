@@ -1,4 +1,5 @@
 #!/bin/bash
+# Crea un usuari "kiosk" amb permisos mínims i configura un entorn d'escriptori senzill (Openbox) que llança el navegador en mode quiosc a una URL específica.
 KIOSK_URL="https://campus.institutpedralbes.cat"
 KIOSK_USER="kiosk"
 KIOSK_PASSWORD="kiosk"
