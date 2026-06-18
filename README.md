@@ -46,7 +46,7 @@ Edit the allow file with a list of allowed domain. One domain only for line.
 Sentinella script requires dig command to translate domains to IPs.
 This file is placed by installation script in clients. 
 
-# Install on clients
+# Install on clients (students)
 
 sudo chmod +x install-kiosk.sh\
 sudo ./install-kiosk.sh\
@@ -54,6 +54,13 @@ sudo chmod +x install-chromium-policies.sh\
 sudo ./install-chromium-policies.sh\
 sudo chmod +x install-sentinella.sh\
 sudo ./install-sentinella.sh
+
+# Install on control computer (teacher)
+
+Compile python executable file with same name as mentioned above.
+
+sudo chmod +x install-sentinella-gui.sh
+sudo ./install-sentinella-gui.sh\
 
 # You do not need to install anything if you use:
 sudo chmod +x onsentinella.sh\
