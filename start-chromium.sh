@@ -3,6 +3,10 @@
 # Install ./install-chromium-policies.sh.sh on pupils computers
 # Requires running ssh server on pupils computers accessible with ssh keys
 
+while true
+
+do
+
 DISPLAY=:0 nohup chromium \
     --no-first-run \
     --disable \
@@ -12,3 +16,5 @@ DISPLAY=:0 nohup chromium \
     --disable-save-password-bubble \
     --start-maximized \
     --kiosk "https://campus.institutpedralbes.cat"
+
+done
