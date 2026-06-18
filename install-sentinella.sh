@@ -40,7 +40,10 @@ fi
 info "Creant /usr/local/bin/sentinella.sh ..."
 
 cp sentinella.sh  /usr/local/bin/sentinella.sh 
-cp allow 	/tmp/allow
+mkdir -p /etc/sentinella
+
+info "Copiant allow a /etc/sentinella/allow ..."
+cp allow 	/etc/sentinella/allow
 chmod +x /usr/local/bin/sentinella.sh
 
 info "Script creat i fet executable."

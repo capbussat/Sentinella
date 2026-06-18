@@ -28,7 +28,7 @@ log_date() {
 }
 
 # comprovació de ip
-ALLOW_FILE=/tmp/allow
+ALLOW_FILE=/etc/sentinella/allow
 
 ips=()
 # Comprova IPs
