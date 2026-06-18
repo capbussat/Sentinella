@@ -42,9 +42,13 @@ info "Creant /usr/local/bin/sentinella.sh ..."
 cp sentinella.sh  /usr/local/bin/sentinella.sh 
 mkdir -p /etc/sentinella
 
-info "Copiant allow a /etc/sentinella/allow ..."
 cp allow 	/etc/sentinella/allow
 chmod +x /usr/local/bin/sentinella.sh
+info "Copiant allow a /etc/sentinella/allow ..."
+
+cp start-chromium-kiosk.sh /usr/local/bin
+chmod +x /usr/local/bin/start-chromium-kiosk.sh
+info "Copiant start-chromium-kiosk.sh a /usr/local/bin/start-chromium-kiosk.sh ..."
 
 info "Script creat i fet executable."
 

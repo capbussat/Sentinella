@@ -124,7 +124,7 @@ if [[ -f "$CHECK_BROWSER" ]]; then
         exit 0
     fi
         echo "Inicia el navegador"
-        # start-chromium-kiosk.sh
+        /usr/local/bin/start-chromium-kiosk.sh
         rm -f "$CHECK_BROWSER_OFF"
         touch "$CHECK_BROWSER_ON"
 else
