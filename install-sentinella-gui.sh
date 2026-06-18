@@ -7,6 +7,13 @@
 #  set -o pipefail prevents errors in a pipeline from being masked# 
 set -euo pipefail
 
+# --- Constants ---
+LOG="/var/log/sentinella.log"
+
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M')] $*" | tee -a "$LOG"
+}
+
 # --- Colors ---
 GREEN="\033[0;32m"
 RED="\033[0;31m"
@@ -42,13 +49,18 @@ coin() {
     fi
 }
 
+log "Copia els de fitxers de Sentinella GUI."
 coin sentinella /usr/local/bin/sentinella
 coin sentinella.desktop /usr/share/applications/sentinella.desktop
-chmod +x /usr/share/applications/sentinella.desktop
-echo "Fes sentinella.desktop executable per obrir l'aplicació."
 coin assets/images/sentinella.svg /usr/share/icons/hicolor/scalable/apps/sentinella.svg
 coin assets/images/sentinella.png /usr/share/icons/hicolor/48x48/apps/sentinella.png
+log "Crea el directori de configuració de Sentinella"
 sudo mkdir -p /etc/sentinella
+log "Copia els fitxers de configuració de Sentinella"
 coin hosts /etc/sentinella/hosts
 coin settings.yaml /etc/sentinella/settings.yaml
-echo "Fet!"
+
+log "Fes sentinella.desktop executable per obrir l'aplicació."
+chmod +x /usr/share/applications/sentinella.desktop
+
+log "Sentinella GUI instal·lada correctament"
