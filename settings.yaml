@@ -40,4 +40,4 @@ buttons:
     unique_word: "usuaris"
     style: "info"
     command: "who | awk '{print $1}'"
- 
+

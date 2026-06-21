@@ -12,6 +12,9 @@ set -euo pipefail
 
 # --- Constants ---
 LOG="/var/log/sentinella.log"
+SETTINGS_DIR="/etc/sentinella"
+BINARY_DIR="/usr/local/bin"
+TMP_FILE="/tmp/sentinella"
 
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M')] $*" | tee -a "$LOG"
@@ -37,19 +40,19 @@ fi
 # 1. Crear el script principal (sentinella.sh)
 #    → Modifica aquest bloc per afegir la lògica real
 # ============================================================
-info "Creant /usr/local/bin/sentinella.sh ..."
+info "Creant $BINARY_DIR/sentinella.sh ..."
 
-cp sentinella.sh  /usr/local/bin/sentinella.sh 
-mkdir -p /etc/sentinella
+cp sentinella.sh  $BINARY_DIR/sentinella.sh 
+mkdir -p $SETTINGS_DIR
 
-cp allow 	/etc/sentinella/allow
-chmod +x /usr/local/bin/sentinella.sh
-info "Copiant allow a /etc/sentinella/allow ..."
+cp allow 	$SETTINGS_DIR/allow
+info "Copiant allow a $SETTINGS_DIR/allow ..."
+chmod +x $BINARY_DIR/sentinella.sh
 
-cp start-chromium.sh /usr/local/bin
-chmod +x /usr/local/bin/start-chromium.sh
-info "Copiant start-chromium.sh a /usr/local/bin/start-chromium.sh ..."
+chmod +x start-chromium.sh
+cp start-chromium.sh $BINARY_DIR/start-chromium.sh
 
+info "Copiant start-chromium.sh a $BINARY_DIR/start-chromium.sh ..."
 info "Script creat i fet executable."
 
 # ============================================================
@@ -59,7 +62,7 @@ info "Creant /etc/systemd/system/sentinella.service ..."
 
 cat > /etc/systemd/system/sentinella.service << 'EOF'
 [Unit]
-Description=Check if a file is present
+Description=Sentinella Service is running every 30 seconds.
 
 [Service]
 Type=oneshot
@@ -112,8 +115,8 @@ systemctl status sentinella.timer --no-pager
 
 echo ""
 info "Comandes útils:"
-echo "  touch /tmp/sentilla desactiva internet"
-echo "  rm --force /tmp/sentinella activa internet"
+echo "  touch $TMP_FILE desactiva internet"
+echo "  rm --force $TMP_FILE activa internet"
 echo "  systemctl status sentinella.timer   → Estat del timer"
 echo "  systemctl status sentinella.service  → Estat del servei"
 echo "  journalctl -u sentinella.service -f  → Logs en temps real"

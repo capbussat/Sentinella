@@ -359,7 +359,7 @@ class SentinellaApp(ttk.Window):
     def execute_selected_command(self):
         if not is_admin():
             return
-        
+ 
         command = self.command_entry.get().strip()
 
         if not command:
@@ -446,7 +446,7 @@ class SentinellaApp(ttk.Window):
             self.append_result(
                 "Sense selecció. No hi ha cap host seleccionat."
             )
-            
+
     def append_result(self, text):
 
         self.result_text.configure(state="normal")
@@ -466,7 +466,7 @@ class SentinellaApp(ttk.Window):
                 if result['success']:
                     style = 'success'
                 else:
-                    style= 'secondary' 
+                    style= 'secondary'
 
                 btn = ttk.Button(
                     self.frame_grid,
@@ -476,7 +476,6 @@ class SentinellaApp(ttk.Window):
 
                 row = i // cols
                 col = i % cols
-            
                 btn.grid(row=row, column=col, sticky="nsew", padx=3, pady=3)
 
         # opcional: fer responsive
@@ -484,10 +483,6 @@ class SentinellaApp(ttk.Window):
             self.frame_grid.columnconfigure(c, weight=1)
 
 
-                    
-                    
-
-        
 if __name__ == "__main__":
     app = SentinellaApp()
     app.mainloop()
