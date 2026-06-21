@@ -69,6 +69,9 @@ def execute_command(host: str, command: str):
             host=host,
             user=SSH_USER,
             connect_timeout=SSH_TIMEOUT,
+  	    #user="sentinella",
+            #connect_kwargs={"key_filename": "/etc/sentinella/ssh_keys/sentinella"}
+
         )
 
         result = conn.run(

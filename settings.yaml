@@ -14,17 +14,22 @@ buttons:
   - title: "Chromium"
     unique_word: "chromium"
     style: "success"
-    command: "DISPLAY=:0 nohup /usr/local/bin/start-chromium-kiosk.sh  >/dev/null 2>&1 &"
-    
+    command: "touch /tmp/sentinella_browser"
+
+  - title: "Chromium desactiva"
+    unique_word: "chromium-desactiva"
+    style: "warning"
+    command: "rm --force /tmp/sentinella_browser"
+
   - title: "Desactiva internet"
     unique_word: "disable"
-    style: "warning"
-    command: "touch /tmp/sentinella"
+    style: "success"
+    command: "touch /tmp/sentinella_internet"
 
   - title: "Activa internet"
     unique_word: "enable"
-    style: "success"
-    command: "rm --force /tmp/sentinella"
+    style: "warning"
+    command: "rm --force /tmp/sentinella_internet"
 
   - title: "Comprova Google"
     unique_word: "google"
