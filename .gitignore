@@ -6,3 +6,4 @@ senti.spec
 *.save
 *.bak
 *.backup
+*.out
