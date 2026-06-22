@@ -15,7 +15,7 @@ CHECK_BROWSER=/tmp/sentinella_browser
 
 # Si està aquest fitxer, no cal engegar de nou
 CHECK_ON="/tmp/sentinella-on"
-CHECK_OFF="/tmp/sentinella-off"            
+CHECK_OFF="/tmp/sentinella-off"
 CHECK_BROWSER_ON="/tmp/sentinella-browser-on"
 CHECK_BROWSER_OFF="/tmp/sentinella-browser-off"
 
@@ -90,7 +90,7 @@ ufw default allow outgoing
     ufw --force enable
     ufw status verbose
     rm -f "${SENTINELLA_IS_ON}"
-echo "Sentinella is OFF"
+    echo "Sentinella is OFF"
     rm -f "${CHECK_ON}"
     touch "${CHECK_OFF}"
     echo "$(log_date) Disabled UFW rules" >> "${LOG}"
@@ -98,42 +98,41 @@ echo "Sentinella is OFF"
 
 
 if [[ -f "$CHECK_INTERNET" ]]; then
-    if [[ -f "$CHECK_ON" ]]; then
-        echo "Continua restrict internet"
-        exit 0
+    if [[ ! -f "$CHECK_ON" ]]; then
+        echo "Restringint internet"
+        restrict
+        rm -f "$CHECK_OFF"
+        touch "$CHECK_ON"
+    else
+        echo "Continua restringint internet"
     fi
-    echo "Restrict internet"
-    restrict
-    rm -f "$CHECK_OFF"
-    touch "$CHECK_ON"
 else
-# elimina en producció la línia echo  
-    if [[ -f "$CHECK_OFF" ]]; then
-        echo "Continua permetent internet"
-        exit 0
-    fi
-      echo "Allow internet"
+    if [[ ! -f "$CHECK_OFF" ]]; then
+        echo "Permet internet"
         allow
         rm -f "$CHECK_ON"
-    
+        touch "$CHECK_OFF"
+    else
+        echo "Continua permetent internet"
+    fi
 fi
 
 if [[ -f "$CHECK_BROWSER" ]]; then
-    if [[ -f "$CHECK_BROWSER_ON" ]]; then
-        echo "Continua actiu el navegador"
-        exit 0
-    fi
+    if [[ ! -f "$CHECK_BROWSER_ON" ]]; then
         echo "Inicia el navegador"
-        /usr/local/bin/start-chromium-kiosk.sh
+        /usr/local/bin/start-chromium.sh
         rm -f "$CHECK_BROWSER_OFF"
         touch "$CHECK_BROWSER_ON"
+    else 
+        echo "Continua actiu el navegador"
+    fi
 else
 # elimina en producció la línia echo
-    if [[ -f "$CHECK_BROWSER_OFF" ]]; then
+    if [[ ! -f "$CHECK_BROWSER_OFF" ]]; then
+        echo "Apaga el navegador"
+        rm -f "$CHECK_BROWSER_ON"
+        touch "$CHECK_BROWSER_OFF"
+    else 
         echo "No engeguis el navegador"
-        exit 0
     fi
-    echo "Apaga el navegador"
-    #  apaga?
-    rm -f "$CHECK_BROWSER_ON"
 fi
