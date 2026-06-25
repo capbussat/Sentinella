@@ -7,7 +7,8 @@ while true
 
 do
 
-DISPLAY=:0 nohup chromium \
+#DISPLAY=:0 nohup chromium \
+chromium \
     --no-first-run \
     --disable \
     --disable-translate \

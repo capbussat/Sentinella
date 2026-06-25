@@ -42,18 +42,31 @@ fi
 # ============================================================
 info "Creant $BINARY_DIR/sentinella.sh ..."
 
-cp sentinella.sh  $BINARY_DIR/sentinella.sh 
 mkdir -p $SETTINGS_DIR
-
-cp allow 	$SETTINGS_DIR/allow
+cp allow $SETTINGS_DIR/allow
 info "Copiant allow a $SETTINGS_DIR/allow ..."
-chmod +x $BINARY_DIR/sentinella.sh
+chmod +x sentinella.sh
+chmod +x install-browser-policies.sh
+chmod +x install-chromium-policies.sh
+chmod +x install-firefox-policies.sh
+chmod +x remove-browser-policies.sh
+info "Fent scripts executables."
 
-chmod +x start-chromium.sh
-cp start-chromium.sh $BINARY_DIR/start-chromium.sh
+cp sentinella.sh  $BINARY_DIR/sentinella.sh
+info "Copiant sentinella.sh $BINARY_DIR/sentinella.sh ..."
+cp install-chromium-policies.sh $BINARY_DIR/install-chromium-policies.sh
+info "Copiant install-chromium-policies.sh a $BINARY_DIR/start-chromium-policies.sh ..."
 
-info "Copiant start-chromium.sh a $BINARY_DIR/start-chromium.sh ..."
-info "Script creat i fet executable."
+cp install-firefox-policies.sh $BINARY_DIR/install-firefox-policies.sh
+info "Copiant install-firefox.sh a $BINARY_DIR/install-firefox-policies.sh ..."
+
+cp install-browser-policies.sh $BINARY_DIR/install-browser-policies.sh
+info "Copiant install-browser-policies.sh a $BINARY_DIR/install-browser-policies.sh ..."
+
+cp remove-browser-policies.sh $BINARY_DIR/remove-browser-policies.sh
+info "Copiant remove-browser-policies.sh a $BINARY_DIR/remove-browser-policies.sh ..."
+
+info "Scripts executables copiats."
 
 # ============================================================
 # 2. Crear la Service Unit

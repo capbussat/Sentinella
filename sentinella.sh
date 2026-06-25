@@ -120,7 +120,7 @@ fi
 if [[ -f "$CHECK_BROWSER" ]]; then
     if [[ ! -f "$CHECK_BROWSER_ON" ]]; then
         echo "Inicia el navegador"
-        /usr/local/bin/start-chromium.sh
+        /bin/bash /usr/local/bin/install-browser-policies.sh
         rm -f "$CHECK_BROWSER_OFF"
         touch "$CHECK_BROWSER_ON"
     else 
@@ -130,7 +130,8 @@ else
 # elimina en producció la línia echo
     if [[ ! -f "$CHECK_BROWSER_OFF" ]]; then
         echo "Apaga el navegador"
-        rm -f "$CHECK_BROWSER_ON"
+        /bin/bash /usr/local/bin/remove-browser-policies.sh
+	rm -f "$CHECK_BROWSER_ON"
         touch "$CHECK_BROWSER_OFF"
     else 
         echo "No engeguis el navegador"

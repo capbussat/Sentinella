@@ -52,8 +52,11 @@ cat > "$POLICIES_FILE" << 'EOF'
     "WebsiteFilter": {
       "Block": ["<all_urls>"],
       "Exceptions": [
+        "https://institutpedralbes.cat/*",
         "https://campus.institutpedralbes.cat/*",
-        "https://accounts.google.com/*"
+        "https://accounts.google.com/*",
+        "https://accounts.google.es/*",
+	"https://accounts.google.de/*"
       ]
     }
   }
