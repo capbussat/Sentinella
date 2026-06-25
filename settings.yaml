@@ -11,22 +11,22 @@ settings:
     settings: "/etc/sentinella"
 
 buttons:
-  - title: "Chromium"
+  - title: "Inst. Browser policies"
     unique_word: "chromium"
     style: "success"
     command: "touch /tmp/sentinella_browser"
 
-  - title: "Chromium desactiva"
+  - title: "Desint. Browser policies"
     unique_word: "chromium-desactiva"
     style: "warning"
     command: "rm --force /tmp/sentinella_browser"
 
-  - title: "Desactiva internet"
+  - title: "Restringeix internet"
     unique_word: "disable"
     style: "success"
     command: "touch /tmp/sentinella_internet"
 
-  - title: "Activa internet"
+  - title: "Permet internet"
     unique_word: "enable"
     style: "warning"
     command: "rm --force /tmp/sentinella_internet"
