@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Sentinella amb Flet
+# És una aplicació que queda aparcada, perquè he seguit en el fitxer senti.py, que és el que s'executa en el arrencada del sistema. Aquesta aplicació és només per a fer proves i per a desenvolupar.
 
 """
 Flet + Fabric multithreaded SSH executor.
