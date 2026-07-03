@@ -8,11 +8,24 @@ set -euo pipefail
 # --- Constants ---
 CHROME_POLICY_DIR="/var/snap/chromium/current/policies/managed"
 CHROME_POLICY_FILE="${CHROME_POLICY_DIR}/policies.json"
-FIREFOX_POLICY_DIR="/var/snap/firefox/current"
+
+# ============================================================
+# Detecta la instal·lació de Firefox (snap o apt)
+# ============================================================
+if snap list firefox &>/dev/null 2>&1; then
+  FIREFOX_POLICY_DIR="/var/snap/firefox/current"
+  info "Firefox detectat com a SNAP → $POLICIES_DIR"
+else
+  FIREFOX_POLICY_DIR="/etc/firefox/policies"
+  info "Firefox detectat com a APT/DEB → $POLICIES_DIR"
+fi
+
 FIREFOX_POLICY_FILE="${FIREFOX_POLICY_DIR}/policies.json"
 
-LOG="/var/log/sentinella.log"
+# just in case ...
+FIREFOX_POLICIES="/etc/firefox/policies/policies.json"
 
+LOG="/var/log/sentinella.log"
 
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M')] $*" | tee -a "$LOG"
@@ -28,4 +41,5 @@ rm -f $CHROME_POLICY_FILE
 log "removed $CHROME_POLICY_FILE"
 rm -f $FIREFOX_POLICY_FILE
 log "removed $FIREFOX_POLICY_FILE"
-
+rm -f $FIREFOX_POLICIES
+log "removed $FIREFOX_POLICIES, just in case..."

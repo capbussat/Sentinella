@@ -7,7 +7,7 @@
 
 # set -e option instructs bash to immediately exit if any command has a non-zero exit status.
 # set -u if variable does not exist causes the program to immediately exit.
-# set -o pipefail prevents errors in a pipeline from being masked# 
+# set -o pipefail prevents errors in a pipeline from being masked#
 set -euo pipefail
 
 # --- Constants ---
