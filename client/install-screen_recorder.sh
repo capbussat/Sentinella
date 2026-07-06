@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 # ============================================================
 #  install-pantalla.sh
@@ -21,6 +20,10 @@ if [[ $EUID -ne 0 ]]; then
   exec sudo bash "$0" "$@"
 fi
 
+PID="/tmp/ffmpeg.pid"
+BIN_DIR="/usr/local/bin/"
+VIDEOS_DIR="/var/lib/sentinella/videos/"
+
 if command -v ffmpeg &>/dev/null; then
   info "ffmpeg detectat."
 else
@@ -28,10 +31,9 @@ else
   apt update -y && apt install ffmpeg -y
 fi
 
-PID="/tmp/ffmpeg.pid"
-BIN_DIR="/usr/local/bin/"
+cp "screen_recorder-start.sh" "${BIN_DIR}screen_recorder-start.sh"
+cp "screen_recorder-stop.sh"  "${BIN_DIR}screen_recorder-stop.sh"
+info "Scripts screen_recorder copiats a ${BIN_DIR}"
 
-cp "screen_recorder-start.sh" "${BIN_DIR}pantalla-start.sh"
-cp "screen_recorder.sh" "${BIN_DIR}pantalla-stop.sh"
-
-info "Scripts pantalla-start.sh i pantalla-stop.sh copiats a ${BIN_DIR}"
+mkdir -p "${VIDEOS_DIR}"
+info "Creat el directori ${VIDEOS_DIR}"
