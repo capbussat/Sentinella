@@ -1,6 +1,6 @@
 settings:
   type: "ssh"
-  ssh_user: "sentinella"
+  ssh_user: "isard"
   ssh_timeout: 5
   max_threads: 10
   disable_time: 20
@@ -30,6 +30,15 @@ buttons:
     unique_word: "enable"
     style: "warning"
     command: "rm --force /tmp/sentinella_internet"
+
+  - title: "Grava"
+    unique_word: "start-recording"
+    style: "success"
+    command: "touch /tmp/sentinella-record"
+  - title: "Para gravació"
+    unique_word: "stop-recording"
+    style: "warning"
+    command: "rm --force /tmp/sentinella-record"
 
   - title: "Comprova Google"
     unique_word: "google"
