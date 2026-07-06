@@ -69,9 +69,6 @@ def execute_command(host: str, command: str):
             host=host,
             user=SSH_USER,
             connect_timeout=SSH_TIMEOUT,
-  	    #user="sentinella",
-            #connect_kwargs={"key_filename": "/etc/sentinella/ssh_keys/sentinella"}
-
         )
 
         result = conn.run(
@@ -80,7 +77,7 @@ def execute_command(host: str, command: str):
             warn=True,
             timeout=SSH_TIMEOUT   # <-- TIMEOUT PER COMANDA
         )
-
+        
         conn.close()
 
         return {
@@ -130,6 +127,7 @@ def run_commands(hosts, title: str, command: str):
 
         for future in as_completed(command_futures):
             results.append(future.result())
+         
 
     return results
 
@@ -150,9 +148,8 @@ class SentinellaApp(ttk.Window):
         self.geometry("1200x800")
 
         self.host_vars = {}
-        self.host_checkbuttons = {}
         self.create_widgets()
-        self.load_hosts()
+        self.create_host_checkbuttons()
         self.create_dynamic_buttons()
 
     def create_dynamic_buttons(self):
@@ -196,8 +193,10 @@ class SentinellaApp(ttk.Window):
         button.config(state="disabled")
         self.update_idletasks()
 
+
         self.results = run_commands(selected_hosts, title, command)
-        
+
+
         self.after(
             DISABLE_TIME,
             lambda b=button: b.config(state="normal")
@@ -390,19 +389,20 @@ class SentinellaApp(ttk.Window):
                 f"[ERROR] {e}"
             )
 
-    def load_hosts(self):
+    def create_host_checkbuttons(self):
 
         try:
-            hosts = load_hosts_from_file()
+            self.hosts = load_hosts_from_file()
+            
 
-            for host in hosts:
+            for host in self.hosts:
 
                 var = ttk.BooleanVar(value=False)
                 self.host_vars[host.ip] = var
 
                 chk = ttk.Checkbutton(
                     self.scrollable_frame,
-                    text= host.label + ": " + host.ip,
+                    text= host.label + " - " + host.ip,
                     variable=var,
                     bootstyle="round-toggle"
                 )
@@ -412,8 +412,6 @@ class SentinellaApp(ttk.Window):
                     padx=10,
                     pady=3
                 )
-
-                self.host_checkbuttons[host.ip] = chk
 
         except FileNotFoundError:
             self.append_result(
@@ -454,6 +452,10 @@ class SentinellaApp(ttk.Window):
         self.result_text.see("end")
         self.result_text.configure(state="disabled")
 
+    def get_host_label(self, ip_str):
+        ip_to_label = {h.ip: h.label for h in self.hosts}
+        return ip_to_label.get(ip_str)
+
     def show(self):
 
         # netejar graella anterior
@@ -468,9 +470,11 @@ class SentinellaApp(ttk.Window):
                 else:
                     style= 'secondary'
 
+                label = self.get_host_label( result['host'])
+
                 btn = ttk.Button(
                     self.frame_grid,
-                    text=result['host'],
+                    text= label ,
                     bootstyle= style
                 )
 

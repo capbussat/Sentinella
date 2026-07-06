@@ -1,6 +1,6 @@
 settings:
   type: "ssh"
-  ssh_user: "isard"
+  ssh_user: "sentinella"
   ssh_timeout: 5
   max_threads: 10
   disable_time: 20
