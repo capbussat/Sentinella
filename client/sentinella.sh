@@ -119,8 +119,12 @@ fi
 
 if [[ -f "$CHECK_BROWSER" ]]; then
     if [[ ! -f "$CHECK_BROWSER_ON" ]]; then
+	# Kill browsers
+	pgrep -f firefox > /dev/null && pkill -f firefox && info "firefox matat!" 
+	pgrep -f chromium > /dev/null && pkill -f chromium && info "chromium matat!"
+        /bin/bash /usr/local/bin/add-firefox-policies.sh
+        /bin/bash /usr/local/bin/add-chromium-policies.sh
         echo "Imposa politiques al navegador"
-        /bin/bash /usr/local/bin/install-browser-policies.sh
         rm -f "$CHECK_BROWSER_OFF"
         touch "$CHECK_BROWSER_ON"
     else 

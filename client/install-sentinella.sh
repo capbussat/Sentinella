@@ -46,22 +46,19 @@ mkdir -p $SETTINGS_DIR
 cp allow $SETTINGS_DIR/allow
 info "Copiant allow a $SETTINGS_DIR/allow ..."
 chmod +x sentinella.sh
-chmod +x install-browser-policies.sh
-chmod +x install-chromium-policies.sh
-chmod +x install-firefox-policies.sh
+chmod +x add-chromium-policies.sh
+chmod +x add-firefox-policies.sh
 chmod +x remove-browser-policies.sh
 info "Fent scripts executables."
 
 cp sentinella.sh  $BINARY_DIR/sentinella.sh
 info "Copiant sentinella.sh $BINARY_DIR/sentinella.sh ..."
-cp install-chromium-policies.sh $BINARY_DIR/install-chromium-policies.sh
-info "Copiant install-chromium-policies.sh a $BINARY_DIR/start-chromium-policies.sh ..."
 
-cp install-firefox-policies.sh $BINARY_DIR/install-firefox-policies.sh
-info "Copiant install-firefox.sh a $BINARY_DIR/install-firefox-policies.sh ..."
+cp add-chromium-policies.sh $BINARY_DIR/add-chromium-policies.sh
+info "Copiant add-chromium-policies.sh a $BINARY_DIR/add-chromium-policies.sh ..."
 
-cp install-browser-policies.sh $BINARY_DIR/install-browser-policies.sh
-info "Copiant install-browser-policies.sh a $BINARY_DIR/install-browser-policies.sh ..."
+cp add-firefox-policies.sh $BINARY_DIR/add-firefox-policies.sh
+info "Copiant add-firefox.sh a $BINARY_DIR/add-firefox-policies.sh ..."
 
 cp remove-browser-policies.sh $BINARY_DIR/remove-browser-policies.sh
 info "Copiant remove-browser-policies.sh a $BINARY_DIR/remove-browser-policies.sh ..."
