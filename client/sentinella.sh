@@ -9,15 +9,18 @@ if [ "$EUID" -ne 0 ]; then
   die "Executa aquest script com a root: sudo bash $0"
 fi
 
-# remove this file to stop internet restrictions.
+# Fitxers posats per controller
 CHECK_INTERNET=/tmp/sentinella_internet
 CHECK_BROWSER=/tmp/sentinella_browser
+CHECK_RECORDER=/tmp/sentinella-record
 
-# Si està aquest fitxer, no cal engegar de nou
+# Fitxers gestionat s per client, per detectar canvis
 CHECK_ON="/tmp/sentinella-on"
 CHECK_OFF="/tmp/sentinella-off"
 CHECK_BROWSER_ON="/tmp/sentinella-browser-on"
 CHECK_BROWSER_OFF="/tmp/sentinella-browser-off"
+CHECK_RECORDER_ON="/tmp/sentinella-record-on"
+CHECK_RECORDER_OFF="/tmp/sentinella-record-off"
 
 # log
 LOG="/var/log/sentinella.log"
@@ -127,7 +130,7 @@ if [[ -f "$CHECK_BROWSER" ]]; then
         echo "Imposa politiques al navegador"
         rm -f "$CHECK_BROWSER_OFF"
         touch "$CHECK_BROWSER_ON"
-    else 
+    else
         echo "Continua les politiques del navegador"
     fi
 else
@@ -137,7 +140,29 @@ else
         /bin/bash /usr/local/bin/remove-browser-policies.sh
 	rm -f "$CHECK_BROWSER_ON"
         touch "$CHECK_BROWSER_OFF"
-    else 
+    else
         echo "El navegador esta net de les politiques"
+    fi
+fi
+
+
+if [[ -f "$CHECK_RECORDER" ]]; then
+    if [[ ! -f "$CHECK_RECORDER_ON" ]]; then
+        /bin/bash /usr/local/bin/screen-recorder-start.sh
+        echo "Grava"
+        rm -f "$CHECK_RECORDER_OFF"
+        touch "$CHECK_RECORDER_ON"
+    else
+        echo "Continua gravant."
+    fi
+else
+# elimina en producció la línia echo
+    if [[ ! -f "$CHECK_RECORDER_OFF" ]]; then
+        echo "Paro de gravar."
+        /bin/bash /usr/local/bin/screen-recorder-stop.sh
+	rm -f "$CHECK_RECORDER_ON"
+        touch "$CHECK_RECORDER_OFF"
+    else
+        echo "No esta gravant."
     fi
 fi
