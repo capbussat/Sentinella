@@ -148,7 +148,7 @@ fi
 
 if [[ -f "$CHECK_RECORDER" ]]; then
     if [[ ! -f "$CHECK_RECORDER_ON" ]]; then
-        /bin/bash /usr/local/bin/screen-recorder-start.sh
+        /bin/bash /usr/local/bin/screen_recorder-start.sh
         echo "Grava"
         rm -f "$CHECK_RECORDER_OFF"
         touch "$CHECK_RECORDER_ON"
@@ -159,7 +159,7 @@ else
 # elimina en producció la línia echo
     if [[ ! -f "$CHECK_RECORDER_OFF" ]]; then
         echo "Paro de gravar."
-        /bin/bash /usr/local/bin/screen-recorder-stop.sh
+        /bin/bash /usr/local/bin/screen_recorder-stop.sh
 	rm -f "$CHECK_RECORDER_ON"
         touch "$CHECK_RECORDER_OFF"
     else
