@@ -57,6 +57,9 @@ info "Copiant sentinella.sh $BINARY_DIR/sentinella.sh ..."
 cp add-chromium-policies.sh $BINARY_DIR/add-chromium-policies.sh
 info "Copiant add-chromium-policies.sh a $BINARY_DIR/add-chromium-policies.sh ..."
 
+cp add-google-chrome-policies.sh $BINARY_DIR/add-google-chrome-policies.sh
+info "Copiant add-google-chrome-policies.sh a $BINARY_DIR/add-google-chrome-policies.sh ..."
+
 cp add-firefox-policies.sh $BINARY_DIR/add-firefox-policies.sh
 info "Copiant add-firefox.sh a $BINARY_DIR/add-firefox-policies.sh ..."
 

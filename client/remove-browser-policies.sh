@@ -2,12 +2,15 @@
 # remove:
 # - Chromium policies
 # - Firefox policies
+# Chrome policies
 
 set -euo pipefail
 
 # --- Constants ---
-CHROME_POLICY_DIR="/var/snap/chromium/current/policies/managed"
+CHROME_POLICY_DIR="/etc/opt/chrome/policies/managed"
 CHROME_POLICY_FILE="${CHROME_POLICY_DIR}/policies.json"
+CHROMIUM_POLICY_DIR="/var/snap/chromium/current/policies/managed"
+CHROMIUM_POLICY_FILE="${CHROMIUM_POLICY_DIR}/policies.json"
 
 # ============================================================
 # Detecta la instal·lació de Firefox (snap o apt)
@@ -37,6 +40,8 @@ if [[ $EUID -ne 0 ]]; then
   exec sudo bash "$0" "$@"
 fi
 
+rm -f $CHROMIUM_POLICY_FILE
+log "removed $CHROMIUM_POLICY_FILE"
 rm -f $CHROME_POLICY_FILE
 log "removed $CHROME_POLICY_FILE"
 rm -f $FIREFOX_POLICY_FILE
