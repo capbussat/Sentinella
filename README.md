@@ -6,9 +6,9 @@ It is in current development, only for Linux desktops.
 
 # Purpose:
 The purpose of this software is to restrict access from a student class to Internet and allow access only to a few sites. 
-It aims to be compatible with using Veyon at the same time.  
+It aims to be compatible with using Veyon at the same time so keeps open required ports on clients computers.  
 - Current versions applies policies to Chromium and Firefox browsers.  
-- Close outgoing internet traffik except for essential services (DHCP, DNS, Veyon ...) and a few allowed domains.  
+- Close outgoing internet traffik except for essential services (DHCP, DNS, Veyon ...) and domains listed on allow file.  
 - Check students can access internet (simple ping to google).  
 
 ## Python controller GUI Requires:
@@ -28,7 +28,10 @@ cd Sentinella/controller  (teacher computer)
 
 cd Sentinella/client (student computer)
 
-### Create a Python environment to create a Pyhton GUI
+### Create a Python environment to create the controller Pyhton GUI
+
+cd Sentinella  
+
 sudo python3 -m venv .venv
 
 source .venv/bin/activate
@@ -40,27 +43,27 @@ python3 controller/senti.py
 # Distribute executable for controller computer
 Create a senti file to distribute the Python GUI:
 
-pyinstaller --onefile --noconsole senti.py
+pyinstaller --onefile --noconsole senti.py  
 
-Disable Python environment with: deactivate.
+Disable Python environment with deactivate.
 
 ### Scripts for Clients
-Use install-sentinella.sh to set up client.  
+Use install-sentinella.sh to set up the clients.  
 
-
-cd Sentinella/client
-sudo chmod +x install-sentinella.sh
-sudo ./install-sentinella.sh
+cd Sentinella/client  
+sudo chmod +x install-sentinella.sh  
+sudo ./install-sentinella.sh  
 
 ### Allow file
-Edit the allow file with a list of allowed domains. One domain for line.
-Sentinella script requires the dig command to translate domains to IPs.
-allow file is placed by the installation script in clients.
+Edit the allow file with a list of allowed domains. One domain for line. allow file is copied by the installation script.  
+You should modify the allow file before the install. If you modify the allow file you can repeat the install process.
+Sentinella script uses the "dig" command to translate domains to IPs.
 
 ### Scripts for controller
-Use install-sentinella-gui.sh to set up controller.  
+Use install-sentinella-gui.sh to set up the controller computer.  
 
-sudo chmod +x install-sentinella-gui.sh
-sudo ./install-sentinella-gui.sh\
+cd Sentinella/controller  
+sudo chmod +x install-sentinella-gui.sh  
+sudo ./install-sentinella-gui.sh  
 
 
